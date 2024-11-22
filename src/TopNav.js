@@ -53,7 +53,7 @@ const Topnav = () => {
 
                     {/* <!-- Nav Item - Search Dropdown (Visible Only XS) --> */}
                     <li className="nav-item dropdown no-arrow d-sm-none">
-                        <a className="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+                        <a className="nav-link dropdown-toggle" href="0" id="searchDropdown" role="button"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i className="fas fa-search fa-fw"></i>
                         </a>
@@ -79,10 +79,10 @@ const Topnav = () => {
 
                     {/* <!-- Nav Item - User Information --> */}
                     <li className="nav-item dropdown no-arrow">
-                        <a className="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                        <a className="nav-link dropdown-toggle" href="0" id="userDropdown" role="button"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <img className="img-profile rounded-circle mr-2"
-                                src="img/undraw_profile.svg" />
+                                src="img/undraw_profile.svg" alt="img" />
                             <div style={{textAlign: 'left'}}>
                                 <span className="mr-2 d-none d-lg-inline text-gray-600 small" >{name} {surname} <br></br> {email}</span> <br></br>
                             </div>

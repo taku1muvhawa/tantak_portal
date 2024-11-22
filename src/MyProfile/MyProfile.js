@@ -45,7 +45,7 @@ const MyProfile = () => {
                                 <div class="user-wrapper">
                                     <div class="row">
                                         <div class="col-md-4 d-flex align-items-center justify-content-center">
-                                            <img src="http://localhost:3003/file/avator.PNG" alt="" />
+                                            <img src="http://localhost:3003/file/avator.PNG" alt="profile" />
                                         </div>
                                         <div class="col-md-8">
                                             <h4>Name: {name}</h4>

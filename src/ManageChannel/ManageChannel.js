@@ -196,10 +196,10 @@ const ManageChannel = () => {
                                     </div>
                                 </div>
 
-                                <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                                    <h1 class="h3 mb-0 text-gray-800">Available Courses</h1>
-                                    <button onClick={openModal} class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                        class="fas fa-upload fa-sm text-white-50"></i> Add Course</button>
+                                <div className="d-sm-flex align-items-center justify-content-between mb-4">
+                                    <h1 className="h3 mb-0 text-gray-800">Available Courses</h1>
+                                    <button onClick={openModal} className="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                                        className="fas fa-upload fa-sm text-white-50"></i> Add Course</button>
                                 </div>
                                 <div style={{ height: '35rem', overflowY: 'auto' }}>
                                     <table className="table table-bordered" id="dataTable" width="100%" cellspacing="0">

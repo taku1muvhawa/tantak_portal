@@ -115,10 +115,12 @@ const Lessons = () => {
                             <div className="container-fluid" style={{ textAlign: 'left', overflow: 'auto', maxHeight: '550px' }}>
 
                                 {isAdmin && (
-                                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                                        <h1 class="h3 mb-0 text-gray-800"></h1>
-                                        <button onClick={openModal} class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                            class="fas fa-upload fa-sm text-white-50"></i> Upload Lesson</button>
+                                    <div className="d-sm-flex align-items-center justify-content-between mb-4">
+                                        {/* <h1 className="h3 mb-0 text-gray-800"></h1> */}
+                                        <div style={{ width: '100%'}}>
+                                            <button onClick={openModal} style={{float: 'right'}} className="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" ><i
+                                                className="fas fa-upload fa-sm text-white-50"></i> Upload Lesson</button>
+                                        </div>
                                     </div>
                                 )}
 

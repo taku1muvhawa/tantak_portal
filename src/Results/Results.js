@@ -162,13 +162,13 @@ const Results = () => {
 
 
                                 {/* TABLE TEXT */}
-                                <div class="card shadow mb-4">
-                                    <div class="card-header py-3">
-                                        <h6 class="m-0 font-weight-bold text-primary">Results Table</h6>
+                                <div className="card shadow mb-4">
+                                    <div className="card-header py-3">
+                                        <h6 className="m-0 font-weight-bold text-primary">Results Table</h6>
                                     </div>
-                                    <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table class="table" id="dataTable" width="100%" cellspacing="0">
+                                    <div className="card-body">
+                                        <div className="table-responsive">
+                                            <table className="table" id="dataTable" width="100%" cellspacing="0">
                                                 <thead>
                                                     <tr>
                                                         <th>Date</th>

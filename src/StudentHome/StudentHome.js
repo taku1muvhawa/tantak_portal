@@ -358,8 +358,8 @@ const StudentHome = () => {
                                                             All<span className="las la-arrow-right"></span></button>
                                                     </div>
                                                     <div className="card-body">
-                                                        <div class="table-responsive">
-                                                            <table class="table" id="dataTable" width="100%" cellspacing="0">
+                                                        <div className="table-responsive">
+                                                            <table className="table" id="dataTable" width="100%" cellspacing="0">
                                                                 <thead>
                                                                     <tr>
                                                                         <th>Lesson No</th>

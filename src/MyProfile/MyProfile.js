@@ -42,12 +42,12 @@ const MyProfile = () => {
 
                                 <h1 className="h3 mb-4 text-gray-800" style={{ textAlign: 'left' }}>My Profile</h1>
 
-                                <div class="user-wrapper">
-                                    <div class="row">
-                                        <div class="col-md-4 d-flex align-items-center justify-content-center">
+                                <div className="user-wrapper">
+                                    <div className="row">
+                                        <div className="col-md-4 d-flex align-items-center justify-content-center">
                                             <img src="http://localhost:3003/file/avator.PNG" alt="profile" />
                                         </div>
-                                        <div class="col-md-8">
+                                        <div className="col-md-8">
                                             <h4>Name: {name}</h4>
                                             <p></p>
                                             <h4>Surname: {surname}</h4> 

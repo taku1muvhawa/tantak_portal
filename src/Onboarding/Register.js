@@ -29,9 +29,9 @@ const Register = () => {
             // const data = await response.json();
 
             if (!response.ok) {
-                throw new Error('Failed to add user'); 
+                throw new Error('Failed to add user');
             }
-    
+
             // Alert user on success
             Swal.fire({
                 text: "Successfully registered! You can proceed to login",
@@ -53,24 +53,24 @@ const Register = () => {
 
     // const handleSubmitAdd = async (e) => {
     //     e.preventDefault();
-        
+
     //     try {
     //         const response = await fetch(`${API_URL}/users`, {
     //             method: 'POST',
     //             headers: { 'Content-Type': 'application/json' },
     //             body: JSON.stringify(formData),
     //         });
-    
+
     //         if (!response.ok) {
     //             throw new Error('Failed to add user'); 
     //         }
-    
+
     //         // Alert user on success
     //         Swal.fire({
     //             text: "User added successfully!",
     //             icon: "success"
     //         });   //*/
-    
+
     //         fetchUsers();
     //         setShowAddModal(false);
     //     } catch (error) {
@@ -190,20 +190,20 @@ const Register = () => {
                                                 <button
                                                     className="btn btn-dark btn-user btn-block"
                                                     type="submit"
-                                                    style={{ backgroundColor: 'rgba(32, 70, 161)', borderColor: 'rgba(32, 70, 161)', width: '100%' }}
+                                                    style={{ backgroundColor: 'rgba(32, 70, 161)', borderColor: 'rgba(32, 70, 161)', width: '100%' }} disabled={isLoading}
                                                 >
                                                     Register
                                                 </button>
-                                                <div class="text-center">
+                                                <div className="text-center">
                                                     <p></p>
-                                                    <a class="small" style={{ color: 'black' }} href="/">Already have an Account? Login!</a>
+                                                    <a className="small" style={{ color: 'black' }} href="/">Already have an Account? Login!</a>
                                                 </div>
                                             </form>
                                             <hr />
                                         </div>
                                     </div>
                                     {isLoading && (
-                                        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '-42px' }}>
+                                        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '-58px' }}>
                                             <BarLoader size={40} width={'100%'} color="blue" loading />
                                         </div>
                                     )}

@@ -108,17 +108,17 @@ const Login = () => {
                                                     className="btn btn-dark btn-user btn-block"
                                                     type="submit"
                                                     // style={{ backgroundColor: 'rgba(17, 112, 63, 0.866)', borderColor: 'rgba(19, 171, 92, 0.866)', width: '100%' }}
-                                                    style={{ backgroundColor: 'rgba(32, 70, 161)', borderColor: 'rgba(32, 70, 161)', width: '100%' }}
+                                                    style={{ backgroundColor: 'rgba(32, 70, 161)', borderColor: 'rgba(32, 70, 161)', width: '100%' }} disabled={isLoading}
                                                 >
                                                     Login
                                                 </button>
-                                                <div class="text-center"><br></br>
-                                                    <a class="small" style={{color: 'black'}} href="/register">Create an Account!</a>
+                                                <div className="text-center"><br></br>
+                                                    <a className="small" style={{color: 'black'}} href="/register">Create an Account!</a>
                                                 </div>
                                             </form>
                                             <hr />
                                         </div>
-                                        {/* <br /><br /><br /><br /><br />   */}<br></br>
+                                        {/* <br /><br /><br /><br /><br />   */}
                                     </div>
                                     {isLoading && (
                                         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '5px' }}>

@@ -200,26 +200,26 @@ const Feedback = () => {
                                 {/* <!-- Page Heading --> */}
                                 {/* <h1 className="h3 mb-4 text-gray-800" style={{ textAlign: 'left' }}>Marked Assignments</h1> */}
 
-                                <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                                    <h1 class="h3 mb-0 text-gray-800">Feedback</h1>
+                                <div className="d-sm-flex align-items-center justify-content-between mb-4">
+                                    <h1 className="h3 mb-0 text-gray-800">Feedback</h1>
                                     {!isAdmin && (
-                                        <button onClick={handleSubmitAssignmnt} class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                            class="fas fa-upload fa-sm text-white-50"></i> Submit Assignment</button>
+                                        <button onClick={handleSubmitAssignmnt} className="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                                            className="fas fa-upload fa-sm text-white-50"></i> Submit Assignment</button>
                                     )}
                                     {isAdmin && (
-                                        <button onClick={handleUploadAssignmnt} class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                            class="fas fa-upload fa-sm text-white-50"></i> Upload Marked Assignment</button>
+                                        <button onClick={handleUploadAssignmnt} className="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                                            className="fas fa-upload fa-sm text-white-50"></i> Upload Marked Assignment</button>
                                     )}
                                 </div>
 
                                 {/* Marked Assignments */}
-                                <div class="card shadow mb-4">
-                                    <div class="card-header py-3">
-                                        <h6 class="m-0 font-weight-bold text-primary">Marked Assignments</h6>
+                                <div className="card shadow mb-4">
+                                    <div className="card-header py-3">
+                                        <h6 className="m-0 font-weight-bold text-primary">Marked Assignments</h6>
                                     </div>
-                                    <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table class="table" id="dataTable" width="100%" cellspacing="0">
+                                    <div className="card-body">
+                                        <div className="table-responsive">
+                                            <table className="table" id="dataTable" width="100%" cellspacing="0">
                                                 <thead>
                                                     <tr>
                                                         <th>Date</th>
@@ -244,13 +244,13 @@ const Feedback = () => {
                                 </div>
                                 {/* <h1 className="h3 mb-4 text-gray-800" style={{ textAlign: 'left' }}>Submitted Assignments</h1> */}
                                 {/* Submitted Assignments */}
-                                <div class="card shadow mb-4">
-                                    <div class="card-header py-3">
-                                        <h6 class="m-0 font-weight-bold text-primary">Submitted Assignments</h6>
+                                <div className="card shadow mb-4">
+                                    <div className="card-header py-3">
+                                        <h6 className="m-0 font-weight-bold text-primary">Submitted Assignments</h6>
                                     </div>
-                                    <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table class="table" id="dataTable" width="100%" cellspacing="0">
+                                    <div className="card-body">
+                                        <div className="table-responsive">
+                                            <table className="table" id="dataTable" width="100%" cellspacing="0">
                                                 <thead>
                                                     <tr>
                                                         <th>Date</th>

@@ -7,7 +7,7 @@ import '../Courses/Courses.css'
 
 const Levels = () => {
     const [dataSource, setDataSource] = useState([]);
-    const [courseId, setCourseId] = useState(localStorage.getItem('courseId'))
+    const [courseId] = useState(localStorage.getItem('courseId'))
 
     // useEffect({
     //     setCourseId(localStorage.getItem('courseId'))

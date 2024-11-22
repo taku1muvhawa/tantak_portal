@@ -194,18 +194,17 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../sidebar";
 import Topnav from "../TopNav";
-import Footer from "../Footer";
 import { API_URL } from "../config";
 import Swal from "sweetalert2";
 import '../Courses/Courses.css';
 
 const Assignments = () => {
     const [dataSource, setDataSource] = useState([]);
-    const [moduleId, setModuleId] = useState(localStorage.getItem('moduleId'));
-    const [adminId, setAdminId] = useState(localStorage.getItem('Admin'));
-    const [teacherId, setTeacherId] = useState(localStorage.getItem('teacher'));
+    const [moduleId] = useState(localStorage.getItem('moduleId'));
+    const [adminId] = useState(localStorage.getItem('Admin'));
+    const [teacherId] = useState(localStorage.getItem('teacher'));
     const [isAdmin, setIsAdmin] = useState(false);
-    const [userId, setUserId] = useState(localStorage.getItem('userId'));
+    const [userId] = useState(localStorage.getItem('userId'));
     const [topic, setTopic] = useState('');
     const [type, setType] = useState('');
     const [showAddModal, setShowAddModal] = useState(false);

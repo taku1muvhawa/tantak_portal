@@ -13,12 +13,12 @@ import '../Courses/Courses.css'
 const ManageCourse = () => {
     const [dataSource, setDataSource] = useState([]);
     const [dataSource2, setDataSource2] = useState([]);
-    const [moduleId, setmoduleId] = useState(localStorage.getItem('moduleId'));
-    const [courseId, setCourseId] = useState(localStorage.getItem('courseId'));
-    const [userId, setUserId] = useState(localStorage.getItem('userId'));
-    const [channelName, setChannelName] = useState(localStorage.getItem('myChannel'));
-    const [courseName, setCourseName] = useState(localStorage.getItem('courseName'));
-    const [channelId, setChannelId] = useState(localStorage.getItem('myChannelId'));
+    // const [moduleId, setmoduleId] = useState(localStorage.getItem('moduleId'));
+    const [courseId] = useState(localStorage.getItem('courseId'));
+    const [userId] = useState(localStorage.getItem('userId'));
+    const [channelName] = useState(localStorage.getItem('myChannel'));
+    const [courseName] = useState(localStorage.getItem('courseName'));
+    // const [channelId, setChannelId] = useState(localStorage.getItem('myChannelId'));
     const [showAddModal, setShowAddModal] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [name, setName] = useState('');
@@ -48,6 +48,7 @@ const ManageCourse = () => {
             }
             const data = await response.json();
             setDataSource(data);
+            console.log(dataSource)
         } catch (error) {
             console.error("Error fetching colleges:", error);
         }

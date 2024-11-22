@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../sidebar";
 import Topnav from "../TopNav";
-import Footer from "../Footer";
 import { API_URL } from "../config";
 import Swal from "sweetalert2";
 import '../Courses/Courses.css'
 
 const Settings = () => {
     const [dataSource, setDataSource] = useState([]);
-    const [moduleId, setmoduleId] = useState(localStorage.getItem('moduleId'));
-    const [userId, setUserId] = useState(localStorage.getItem('userId'));
+    const [moduleId] = useState(localStorage.getItem('moduleId'));
+    const [userId] = useState(localStorage.getItem('userId'));
     const [countMod, setCouuntMod] = useState('');
 
     const storedUser = localStorage.getItem('user');
@@ -27,11 +26,6 @@ const Settings = () => {
         setFormData({ ...formData, [name]: value });
     };
 
-
-    const handleChannelClick = (id) => {
-        localStorage.setItem('level', id);
-    };
-
     const fetchModules = async () => {
         try {
             const response = await fetch(`${API_URL}/subscriptions/student/${userId}/${moduleId}`);
@@ -41,6 +35,8 @@ const Settings = () => {
             const data = await response.json();
             setDataSource(data);
             setCouuntMod(data.length);
+            console.log(countMod)
+            console.log(dataSource)
         } catch (error) {
             console.error("Error fetching colleges:", error);
         }

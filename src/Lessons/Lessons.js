@@ -9,11 +9,11 @@ import '../Courses/Courses.css'
 
 const Lessons = () => {
     const [dataSource, setDataSource] = useState([]);
-    const [moduleId, setmoduleId] = useState(localStorage.getItem('moduleId'));
-    const [userId, setUserId] = useState(localStorage.getItem('userId'));
+    const [moduleId] = useState(localStorage.getItem('moduleId'));
+    const [userId] = useState(localStorage.getItem('userId'));
     const [isAdmin, setIsAdmin] = useState(false);
-    const [adminId, setAdminId] = useState(localStorage.getItem('Admin'));
-    const [teacherId, setTeacherId] = useState(localStorage.getItem('teacher'));
+    const [adminId] = useState(localStorage.getItem('Admin'));
+    const [teacherId] = useState(localStorage.getItem('teacher'));
     const [showAddModal, setShowAddModal] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [lesson_no, setLesson_no] = useState('');

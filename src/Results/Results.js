@@ -8,21 +8,21 @@ import '../Courses/Courses.css'
 
 const Results = () => {
     const [dataSource, setDataSource] = useState([]);
-    const [moduleId, setModuleId] = useState(localStorage.getItem('moduleId'));
-    const [userId, setUserId] = useState(localStorage.getItem('userId'));
+    const [moduleId] = useState(localStorage.getItem('moduleId'));
+    const [userId] = useState(localStorage.getItem('userId'));
     const [isAdmin, setIsAdmin] = useState(false);
-    const [adminId, setAdminId] = useState(localStorage.getItem('Admin'));
-    const [teacherId, setTeacherId] = useState(localStorage.getItem('teacher'));
+    const [adminId] = useState(localStorage.getItem('Admin'));
+    const [teacherId] = useState(localStorage.getItem('teacher'));
     const [showAddModal, setShowAddModal] = useState(false);
 
     // Search state for student selection
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredStudents, setFilteredStudents] = useState([]);
     const [students, setStudents] = useState([]);
-    const [studentId, setStudentId] = useState([]);
+    // const [studentId, setStudentId] = useState([]);
 
     const [assignments, setAssignments] = useState([]);
-    const [assignment_id, setAssignment_id] = useState([]);
+    // const [assignment_id, setAssignment_id] = useState([]);
     const [totalPM, setTotalPM] = useState('');
 
     const [formData, setFormData] = useState({

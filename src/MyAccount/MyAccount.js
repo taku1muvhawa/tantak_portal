@@ -7,11 +7,8 @@ import '../Courses/Courses.css'
 
 const MyAccount = () => {
     const [dataSource, setDataSource] = useState([]);
-    const [moduleId, setmoduleId] = useState(localStorage.getItem('moduleId'));
-    const [userId, setUserId] = useState(localStorage.getItem('userId'));
-    const handleChannelClick = (id) => {
-        localStorage.setItem('level', id);
-    };
+    const [moduleId] = useState(localStorage.getItem('moduleId'));
+    const [userId] = useState(localStorage.getItem('userId'));
 
     const fetchModules = async () => {
         try {

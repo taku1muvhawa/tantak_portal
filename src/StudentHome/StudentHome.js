@@ -1,29 +1,26 @@
 import React, { useEffect, useState } from "react";
-import Footer from "../Footer";
 import Sidebar from "../sidebar";
 import Topnav from "../TopNav";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faUsers,
-    faChurch,
-    faCalendarAlt
     // faPeopleArrows,
 } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import { API_URL } from "../config";
 import { expDate } from "../Components/ExpDate";
 import Swal from "sweetalert2";
-import { ClipLoader, BarLoader } from 'react-spinners';
+import { ClipLoader } from 'react-spinners';
 
 const StudentHome = () => {
 
     const navigate = useNavigate();
     const [dataSource, setDataSource] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [moduleId, setmoduleId] = useState(localStorage.getItem('moduleId'));
-    const [courseId, setCourseId] = useState(localStorage.getItem('moduleId'));
-    const [userId, setUserId] = useState(localStorage.getItem('userId'));
-    const [price, setPrice] = useState(localStorage.getItem('price'));
+    const [moduleId] = useState(localStorage.getItem('moduleId'));
+    const [courseId] = useState(localStorage.getItem('moduleId'));
+    const [userId] = useState(localStorage.getItem('userId'));
+    const [price] = useState(localStorage.getItem('price'));
     const [lessonCount, setLessonCount] = useState('');
     const [assignmentCount, setAssignmentCount] = useState('');
     const [noteCount, setNoteCount] = useState('');
@@ -33,13 +30,13 @@ const StudentHome = () => {
     const [subState, setSubState] = useState('...loading');
 
     const [isAdmin, setIsAdmin] = useState(false);
-    const [adminId, setAdminId] = useState(localStorage.getItem('Admin'));
-    const [teacherId, setTeacherId] = useState(localStorage.getItem('teacher'));
+    const [adminId] = useState(localStorage.getItem('Admin'));
+    const [teacherId] = useState(localStorage.getItem('teacher'));
 
     const [subscription, setSubscription] = useState('...Loading')
 
     //Subcription
-    const [formData, setFormData] = useState({
+    const [formData] = useState({
         course_id: courseId,
         module_id: moduleId,
         student_id: userId,
@@ -164,8 +161,9 @@ const StudentHome = () => {
 
     useEffect(() => {
         const checkAdmin = () => {
-            if (userId == adminId || userId == teacherId) {
+            if (userId === adminId || userId === teacherId) {
                 setIsAdmin(true);
+                console.log(isAdmin);
                 setIsSubscribed(true);
                 setSubscription('Admin');
             }else{

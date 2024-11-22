@@ -7,7 +7,7 @@ import '../Courses/Courses.css'
 
 const Modules = () => {
     const [dataSource, setDataSource] = useState([]);
-    const [levelId, setlevelId] = useState(localStorage.getItem('levelId'))
+    const [levelId] = useState(localStorage.getItem('levelId'))
 
     const handleChannelClick = (id, teacher, price) => {
         localStorage.setItem('moduleId',id );

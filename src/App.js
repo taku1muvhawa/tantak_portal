@@ -1,8 +1,6 @@
 import './App.css';
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Dashboard from './Dashboard';
-
 import Login from './Login';
 import Register from './Onboarding/Register';
 import Courses from './Courses/Courses';

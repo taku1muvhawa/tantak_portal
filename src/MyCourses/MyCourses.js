@@ -9,14 +9,10 @@ import '../Courses/Courses.css'
 const MyCourses = () => {
     const navigate = useNavigate();
     const [dataSource, setDataSource] = useState([]);
-    const [moduleId, setmoduleId] = useState(localStorage.getItem('moduleId'));
-    const [userId, setUserId] = useState(localStorage.getItem('userId'));
+    // const [moduleId, setmoduleId] = useState(localStorage.getItem('moduleId'));
+    const [userId] = useState(localStorage.getItem('userId'));
     const [countMod, setCouuntMod] = useState('');
-
-    const handleChannelClick = (id) => {
-        localStorage.setItem('level', id);
-    };
-
+    
     const fetchModules = async () => {
         try {
             const response = await fetch(`${API_URL}/subscriptions/student/${userId}`);

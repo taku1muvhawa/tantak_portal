@@ -13,10 +13,10 @@ import '../Courses/Courses.css'
 const ManageChannel = () => {
     const [dataSource, setDataSource] = useState([]);
     const [dataSource2, setDataSource2] = useState([]);
-    const [moduleId, setmoduleId] = useState(localStorage.getItem('moduleId'));
-    const [userId, setUserId] = useState(localStorage.getItem('userId'));
-    const [channelName, setChannelName] = useState(localStorage.getItem('myChannel'));
-    const [channelId, setChannelId] = useState(localStorage.getItem('myChannelId'));
+    const [moduleId] = useState(localStorage.getItem('moduleId'));
+    const [userId] = useState(localStorage.getItem('userId'));
+    const [channelName] = useState(localStorage.getItem('myChannel'));
+    const [channelId] = useState(localStorage.getItem('myChannelId'));
     const [showAddModal, setShowAddModal] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [name, setName] = useState('');
@@ -45,6 +45,7 @@ const ManageChannel = () => {
             }
             const data = await response.json();
             setDataSource2(data);
+            console.log(dataSource2);
         } catch (error) {
             console.error("Error fetching colleges:", error);
         }

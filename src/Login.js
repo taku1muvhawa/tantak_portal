@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { API_URL } from "./config";
 import Swal from "sweetalert2";
@@ -42,6 +42,16 @@ const Login = () => {
             setIsLoading(false);
         }
     };
+
+    useEffect(()=>{
+        const handleLogout = () => {
+            localStorage.clear();
+            console.log("User logged out");
+        };
+
+        handleLogout();
+    },[])
+
 
     return (
         <div style={{ backgroundColor: 'rgb(246, 243, 237)', height: '100vh', margin: 0 }}>
@@ -113,7 +123,7 @@ const Login = () => {
                                                     Login
                                                 </button>
                                                 <div className="text-center"><br></br>
-                                                    <a className="small" style={{color: 'black'}} href="/register">Create an Account!</a>
+                                                    <a className="small" style={{ color: 'black' }} href="/register">Create an Account!</a>
                                                 </div>
                                             </form>
                                             <hr />

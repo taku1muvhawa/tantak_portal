@@ -47,7 +47,7 @@ const Courses = () => {
                             <div className="container-fluid" style={{ textAlign: 'left', overflow: 'auto', maxHeight: '550px' }}>
 
                                 {/* <!-- Page Heading --> */}
-                                <h1 className="h3 mb-4 text-gray-800" style={{ textAlign: 'left' }}>Available Courses</h1>
+                                <h1 className="h3 mb-4 text-gray-800" style={{ textAlign: 'left' }}>Available Colleges & Tutors</h1>
                                 <div style={{backgroundColor: 'white'}}>
                                     <div className="courses-table">
                                         {dataSource.map((element) => (

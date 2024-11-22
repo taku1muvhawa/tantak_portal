@@ -7,6 +7,7 @@ import '../Courses/Courses.css'
 const Modules = () => {
     const [dataSource, setDataSource] = useState([]);
     const [levelId] = useState(localStorage.getItem('levelId'))
+    const [countLevel, setCountLevel] = useState(true);
 
     const handleChannelClick = (id, teacher, price) => {
         localStorage.setItem('moduleId',id );
@@ -22,6 +23,9 @@ const Modules = () => {
             }
             const data = await response.json();
             setDataSource(data);
+            if(data.length < 1){
+                setCountLevel(false);
+            }
         } catch (error) {
             console.error("Error fetching colleges:", error);
         }
@@ -49,6 +53,9 @@ const Modules = () => {
 
                                 {/* <!-- Page Heading --> */}
                                 <h1 className="h3 mb-4 text-gray-800" style={{ textAlign: 'left' }}>Select Module</h1>
+                                {!countLevel && (
+                                    <h1 className="h3 mb-4 text-gray-800" style={{ textAlign: 'left' }}>No Modules Available</h1>
+                                )}
                                 <div style={{backgroundColor: 'white'}}>
                                     <div className="courses-table">
                                         {dataSource.map((element) => (

@@ -6,14 +6,15 @@ import '../Courses/Courses.css'
 
 const Levels = () => {
     const [dataSource, setDataSource] = useState([]);
-    const [courseId] = useState(localStorage.getItem('courseId'))
+    const [courseId] = useState(localStorage.getItem('courseId'));
+    const [countLevel, setCountLevel] = useState(true);
 
     // useEffect({
     //     setCourseId(localStorage.getItem('courseId'))
     // },[])
 
     const handleChannelClick = (id) => {
-        localStorage.setItem('levelId',id );
+        localStorage.setItem('levelId', id);
     };
 
     const fetchColleges = async () => {
@@ -24,6 +25,9 @@ const Levels = () => {
             }
             const data = await response.json();
             setDataSource(data);
+            if(data.length < 1){
+                setCountLevel(false);
+            }
         } catch (error) {
             console.error("Error fetching colleges:", error);
         }
@@ -51,7 +55,10 @@ const Levels = () => {
 
                                 {/* <!-- Page Heading --> */}
                                 <h1 className="h3 mb-4 text-gray-800" style={{ textAlign: 'left' }}>Select Level</h1>
-                                <div style={{backgroundColor: 'white'}}>
+                                {!countLevel && (
+                                    <h1 className="h3 mb-4 text-gray-800" style={{ textAlign: 'left' }}>No Course levels Available</h1>
+                                )}
+                                <div style={{ backgroundColor: 'white' }}>
                                     <div className="courses-table">
                                         {dataSource.map((element) => (
                                             <div className="course-item" key={element.college_id}>

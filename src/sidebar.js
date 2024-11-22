@@ -1,17 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    faTachometerAlt,
-    faUsers,
-    faDonate,
-    faHandHoldingHeart,
-    faCalendarAlt,
-    faChurch,
-    faChartLine,
-    faSignOutAlt,
-    faTools
-} from '@fortawesome/free-solid-svg-icons';
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { API_URL } from "./config";
 
 const Sidebar = () => {
@@ -20,14 +8,14 @@ const Sidebar = () => {
     const storedUser = localStorage.getItem('user');
     const user = JSON.parse(storedUser);
 
-    const toggleDropdown = (id) => {
-        setOpenDropdown(openDropdown === id ? null : id);
-    };
+    // const toggleDropdown = (id) => {
+    //     setOpenDropdown(openDropdown === id ? null : id);
+    // };
 
-    const handleLogout = () => {
-        localStorage.clear();
-        console.log("User logged out");
-    };
+    // const handleLogout = () => {
+    //     localStorage.clear();
+    //     console.log("User logged out");
+    // };
 
     const navigate = useNavigate();
 

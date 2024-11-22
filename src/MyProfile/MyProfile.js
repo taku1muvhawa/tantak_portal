@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../sidebar";
 import Topnav from "../TopNav";
-import Footer from "../Footer";
-import { API_URL } from "../config";
 import '../MyProfile/MyProfile.css'
 
 const MyProfile = () => {

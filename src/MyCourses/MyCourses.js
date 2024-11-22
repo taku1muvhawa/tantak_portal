@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../sidebar";
 import Topnav from "../TopNav";
-import Footer from "../Footer";
 import { API_URL } from "../config";
 import { useNavigate } from 'react-router-dom';
 import '../Courses/Courses.css'
@@ -12,7 +11,7 @@ const MyCourses = () => {
     // const [moduleId, setmoduleId] = useState(localStorage.getItem('moduleId'));
     const [userId] = useState(localStorage.getItem('userId'));
     const [countMod, setCouuntMod] = useState('');
-    
+
     const fetchModules = async () => {
         try {
             const response = await fetch(`${API_URL}/subscriptions/student/${userId}`);

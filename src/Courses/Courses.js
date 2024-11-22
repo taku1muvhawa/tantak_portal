@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react"; // Import useState
 import Sidebar from "../sidebar";
 import Topnav from "../TopNav";
-import Footer from "../Footer";
 import { API_URL } from "../config";
 import './Courses.css'
 

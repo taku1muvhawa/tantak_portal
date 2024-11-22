@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../sidebar";
 import Topnav from "../TopNav";
-import Footer from "../Footer";
-import { useParams, useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 import { API_URL } from "../config";
 import { ClipLoader, BarLoader } from "react-spinners";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faPlus, faEye, faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faEye } from '@fortawesome/free-solid-svg-icons';
 import Swal from "sweetalert2";
 import '../Courses/Courses.css'
 

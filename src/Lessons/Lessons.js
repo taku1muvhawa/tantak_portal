@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../sidebar";
 import Topnav from "../TopNav";
-import Footer from "../Footer";
 import { API_URL } from "../config";
 import Swal from "sweetalert2";
 import { ClipLoader, BarLoader } from 'react-spinners';
@@ -41,7 +40,7 @@ const Lessons = () => {
 
     useEffect(() => {
         const checkAdmin = () => {
-            if (userId == adminId || userId == teacherId) {
+            if (userId === adminId || userId === teacherId) {
                 setIsAdmin(true);
             }
         };

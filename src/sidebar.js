@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { API_URL } from "./config";
 
 const Sidebar = () => {
-    const [openDropdown, setOpenDropdown] = useState(null);
+    // const [openDropdown, setOpenDropdown] = useState(null);
     const [isAdmin, setIsAdmin] = useState(false);
     const storedUser = localStorage.getItem('user');
     const user = JSON.parse(storedUser);

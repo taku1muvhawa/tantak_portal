@@ -75,7 +75,7 @@ const Results = () => {
 
     useEffect(() => {
         const checkAdmin = () => {
-            if (userId == adminId || userId == teacherId) {
+            if (userId === adminId || userId === teacherId) {
                 setIsAdmin(true);
             }
         };

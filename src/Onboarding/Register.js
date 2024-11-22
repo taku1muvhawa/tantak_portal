@@ -26,7 +26,7 @@ const Register = () => {
                 body: JSON.stringify(credObj)
             });
 
-            const data = await response.json();
+            // const data = await response.json();
 
             if (!response.ok) {
                 throw new Error('Failed to add user'); 

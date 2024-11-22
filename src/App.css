@@ -1,0 +1,364 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.courses-table {
+  display: flex;
+  flex-direction: column;
+}
+
+.course-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  /* Space between items */
+  border: 1px solid #ccc;
+  /* Optional border */
+  padding: 10px;
+  /* Padding around items */
+  border-radius: 5px;
+  /* Rounded corners */
+}
+
+.course-img {
+  width: 180px;
+  /* Set the width of the image */
+  height: 120px;
+  /* Set the height of the image */
+  border-radius: 5px;
+  /* Optional rounded corners */
+  margin-right: 20px;
+  /* Space between image and text */
+}
+
+.course-info {
+  display: flex;
+  flex-direction: column;
+  /* Stack name and description vertically */
+}
+
+.course-info a {
+  font-weight: bold;
+  /* Make the course name bold */
+  font-size: larger;
+}
+
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-label {
+  text-align: left;
+  float: left;
+  /* margin-bottom: 0.5rem;  */
+}
+
+.search-input2 {
+  background-color: #c3f3f5;
+  border: 1px solid #ced4da;
+}
+
+.custom-input {
+  height: 38px !important;
+  padding: 10px;
+}
+
+.custom-btn {
+  height: 38px !important;
+  padding: 10px;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.bg-gradient-primary {
+  background: linear-gradient(180deg, navy, rgb(5, 128, 169));
+  /* Adjust the second color as needed */
+}
+
+/* .bg-gradient-primary {
+    background: linear-gradient(180deg, rgba(17, 112, 63, 0.866), rgba(11, 84, 46, 0.5)); /* Adjust the second color as needed *
+} */
+
+/* .cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 2rem;
+}
+
+.card-single{
+  display: flex;
+  justify-content: space-between;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 2px;
+}
+
+.card-single h1 {
+
+} */
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 2rem;
+  margin-top: 1;
+}
+
+.card-single {
+  display: flex;
+  justify-content: space-between;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 2px;
+}
+
+.card-single div:first-child span {
+  font-size: 1.2rem;
+  color: var(--text-grey);
+}
+
+.card-single:last-child {
+  background-color: #3538ee;
+  color: #fff;
+}
+
+.card-single button {
+  background: #3538ee;
+  border-radius: 10px;
+  color: #fff;
+  font-size: .9rem;
+  padding: .4rem .6rem;
+  border: 1px solid #3538ee;
+}
+
+.recent-grid {
+  margin-top: 3.5rem;
+  display: grid;
+  grid-gap: 2rem;
+  grid-template-columns: 70% auto;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 5px;
+}
+
+.card-header,
+.card-body {
+  padding: 1rem;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.card-header button {
+  background: #675dc5;
+  /* background: #33593d; */
+  border-radius: 10px;
+  color: #fff;
+  font-size: .9rem;
+  padding: .5rem .1rem;
+  border: 1px solid #5d5fc5;
+  /* border: 1px solid #33593d; */
+}
+
+.card-body h4 {
+  display: inline-block;
+}
+
+.card-body img {
+  border-radius: 50%;
+}
+
+.recent-grid {
+  margin-top: 3.5rem;
+  display: grid;
+  grid-gap: 2rem;
+  grid-template-columns: 70% auto;
+}
+
+.topics-grid{
+  width: 65% !important;
+}
+.notifications-grid{
+  width: 35% !important;
+}
+
+/*Lessons*/
+.lessons img{
+  border-radius: 17%;
+  width: 280px; 
+  height:210px 
+}
+.lessons small{
+  padding-left: 15px;
+  font-size: 15px; 
+  font-weight:lighter;
+}
+.lessons a{
+  padding-left: 0rem;
+  font-weight: bold;
+  font-size: 220%
+}
+.lessons p{
+  padding-left: 0rem;
+  font-size: 20px; 
+  font-weight: lighter; 
+  padding-top: 17px;
+}
+.lessons td{
+  padding-bottom: 16px;
+}
+
+/*Testing*/
+@media only screen and (max-width:960px){
+  .cards{
+      /* display: grid; */
+      grid-template-columns: repeat(2, 1fr);
+      /* grid-gap: 2rem;
+      margin-top: 1; */
+  }
+}
+
+@media only screen and (max-width:780px){
+  .cards{
+      grid-template-columns: repeat(2, 1fr);
+  }
+  .search-wrapper{
+      display: none;
+  }
+}
+
+@media only screen and (max-width:720px){
+  .cards{
+      grid-template-columns: repeat(1 , 1fr);
+  }
+  .search-wrapper{
+      display: none;
+  }
+  .recent-grid{
+      grid-template-columns: 100%;
+  }
+
+  .main-content{
+      margin-left: 70px;
+      width: 100%;
+  }
+  .main-content header{
+      width: calc(100% - 70px);
+      /* width: 100%; */
+      left: 1px;
+  }
+  header{
+      margin-left: 70px;
+  }
+  main{
+      width: 100%;
+  }
+  table{
+      border-collapse: collapse;
+      width: 84%;
+  }
+  .tblHeader{
+      font-size: 15px; 
+      font-weight: bold;
+  }
+
+}
+
+@media only screen and (max-width:540px){
+  .cards{
+      grid-template-columns: repeat(1 , 1fr);
+  }
+  .search-wrapper{
+      display: none;
+  }
+  .recent-grid{
+      grid-template-columns: 100%;
+  }
+
+  .topics-grid{
+    width: 100% !important;
+  }
+  .notifications-grid{
+    width: 100% !important;
+  }
+
+  .main-content{
+      margin-left: 0px;
+      width: 100%;
+  }
+  .main-content header{
+      /* width: calc(100% - 70px); */
+      width: 100%;
+      left: 1px;
+  }
+  header{
+      margin-left: 0px;
+      z-index: 1000;
+  }
+  main{
+      width: 100%;    
+  }
+  table{
+      border-collapse: collapse;
+      width: 84%;
+  }
+  .tblHeader{
+      font-size: 15px; 
+      font-weight: bold;
+  }
+  header h1 label{
+      background-color: #675dc5;
+      height: 40px;
+      width: 50px;
+      border-radius: 45%;
+  }
+  header h1 span{
+      font-size: large;
+  }
+  .sidebar-menu a{
+      font-size: 0.8rem;
+  }
+}

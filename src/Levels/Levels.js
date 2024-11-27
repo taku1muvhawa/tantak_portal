@@ -54,9 +54,9 @@ const Levels = () => {
                             <div className="container-fluid" style={{ textAlign: 'left', overflow: 'auto', maxHeight: '550px' }}>
 
                                 {/* <!-- Page Heading --> */}
-                                <h1 className="h3 mb-4 text-gray-800" style={{ textAlign: 'left' }}>Select Level</h1>
+                                <h1 className="h3 mb-4 text-gray-800" style={{ textAlign: 'left' }}>Select Course</h1>
                                 {!countLevel && (
-                                    <h1 className="h3 mb-4 text-gray-800" style={{ textAlign: 'left' }}>No Course levels Available</h1>
+                                    <h4 className="h3 mb-4 text-gray-800" style={{ textAlign: 'left' }}>No Course levels Available</h4>
                                 )}
                                 <div style={{ backgroundColor: 'white' }}>
                                     <div className="courses-table">

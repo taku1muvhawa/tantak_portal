@@ -4,7 +4,10 @@ import Topnav from "../TopNav";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faUsers,
-    // faPeopleArrows,
+    faVideo,
+    faClipboardList,
+    faStickyNote,
+    faClipboardCheck
 } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import { API_URL } from "../config";
@@ -232,7 +235,7 @@ const StudentHome = () => {
                                         <div>
                                             {/* <span><img src="../../assets/Icons/BoardIcon.png" width="40px" height="40px" /></span> */}
                                             <span>
-                                                <FontAwesomeIcon icon={faUsers} className="icon-xl" style={{ fontSize: '1.8rem', color: '#004d00' }} />
+                                                <FontAwesomeIcon icon={faVideo} className="icon-xl" style={{ fontSize: '1.8rem', color: '#004d00' }} />
                                             </span>
                                             <div>
                                                 <div>
@@ -250,7 +253,7 @@ const StudentHome = () => {
                                         <div>
                                             {/* <span><img src="../../assets/Icons/BoardIcon.png" width="40px" height="40px" /></span> */}
                                             <span>
-                                                <FontAwesomeIcon icon={faUsers} className="icon-xl" style={{ fontSize: '1.8rem', color: '#004d00' }} />
+                                                <FontAwesomeIcon icon={faClipboardList} className="icon-xl" style={{ fontSize: '1.8rem', color: '#004d00' }} />
                                             </span>
                                             <div>
                                                 <div>
@@ -268,7 +271,7 @@ const StudentHome = () => {
                                         <div>
                                             {/* <span><img src="../../assets/Icons/BoardIcon.png" width="40px" height="40px" /></span> */}
                                             <span>
-                                                <FontAwesomeIcon icon={faUsers} className="icon-xl" style={{ fontSize: '1.8rem', color: '#004d00' }} />
+                                                <FontAwesomeIcon icon={faStickyNote} className="icon-xl" style={{ fontSize: '1.8rem', color: '#004d00' }} />
                                             </span>
                                             <div>
                                                 <div>
@@ -286,7 +289,7 @@ const StudentHome = () => {
                                         <div>
                                             {/* <span><img src="../../assets/Icons/BoardIcon.png" width="40px" height="40px" /></span> */}
                                             <span>
-                                                <FontAwesomeIcon icon={faUsers} className="icon-xl" style={{ fontSize: '1.8rem', color: '#004d00' }} />
+                                                <FontAwesomeIcon icon={faClipboardCheck} className="icon-xl" style={{ fontSize: '1.8rem', color: '#004d00' }} />
                                             </span>
                                             <div>
                                                 <div>
@@ -304,7 +307,7 @@ const StudentHome = () => {
                                         <div>
                                             {/* <span><img src="../../assets/Icons/BoardIcon.png" width="40px" height="40px" /></span> */}
                                             <span>
-                                                <FontAwesomeIcon icon={faUsers} className="icon-xl" style={{ fontSize: '1.8rem', color: '#004d00' }} />
+                                                <FontAwesomeIcon icon={faClipboardList} className="icon-xl" style={{ fontSize: '1.8rem', color: '#004d00' }} />
                                             </span>
                                             <div>
                                                 <div>

@@ -54,7 +54,7 @@ const Modules = () => {
                                 {/* <!-- Page Heading --> */}
                                 <h1 className="h3 mb-4 text-gray-800" style={{ textAlign: 'left' }}>Select Module</h1>
                                 {!countLevel && (
-                                    <h1 className="h3 mb-4 text-gray-800" style={{ textAlign: 'left' }}>No Modules Available</h1>
+                                    <h4 className="h3 mb-4 text-gray-800" style={{ textAlign: 'left' }}>No Modules Available</h4>
                                 )}
                                 <div style={{backgroundColor: 'white'}}>
                                     <div className="courses-table">

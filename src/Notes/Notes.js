@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react"; // Import useState
 import Sidebar from "../sidebar";
 import Topnav from "../TopNav";
-import { API_URL } from "../config";
+import { API_URL, token } from "../config";
 import Swal from "sweetalert2";
 import '../Courses/Courses.css'
+import { useNavigate } from "react-router-dom";
+import { getCurrentDate } from "../Components/DateFunction";
 
 const Notes = () => {
     const [dataSource, setDataSource] = useState([]);
@@ -16,6 +18,19 @@ const Notes = () => {
     const [author, setAuthor] = useState('');
     const [showAddModal, setShowAddModal] = useState(false);
     const [file, setFile] = useState(null);
+    const navigate = useNavigate();
+    const [hide, setHide] = useState(false);
+
+    const toggleSidebar = () => {
+        setHide(prevHide => !prevHide); // Toggle the hide state
+    };
+
+    useEffect(() => {
+        if (localStorage.getItem('sd') !== "true") {
+            navigate('/courses')
+        } 
+
+    }, [])
 
     const handleShowModal = () => {
         setShowAddModal(true);
@@ -23,7 +38,12 @@ const Notes = () => {
 
     const fetchNotes = async () => {
         try {
-            const response = await fetch(`${API_URL}/notes/mod/${moduleId}`);
+            const response = await fetch(`${API_URL}/notes/mod/${moduleId}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token()}`
+                }
+            });
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -38,10 +58,33 @@ const Notes = () => {
         fetchNotes();
     }, []);
 
-        useEffect(() => {
+    const checkSub = async () => {
+        try {
+            const response = await fetch(`${API_URL}/subscriptions/student/${userId}/${moduleId}/${getCurrentDate()}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token()}`
+                }
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            if (data.length < 1) {
+                navigate('/courses');
+            }
+            console.log(data.length);
+        } catch (error) {
+            console.error("Error fetching colleges:", error);
+        }
+    };
+
+    useEffect(() => {
         const checkAdmin = () => {
             if (userId === adminId || userId === teacherId) {
                 setIsAdmin(true);
+            }else{
+                checkSub();
             }
         };
 
@@ -65,6 +108,9 @@ const Notes = () => {
             // Upload Assignment
             const response = await fetch(`${API_URL}/notes/note`, {
                 method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token()}`
+                },
                 body: formData,
             });
 
@@ -85,6 +131,38 @@ const Notes = () => {
         }
     };
 
+    const handleDelete = async (id) => {
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+        });
+
+        if (result.isConfirmed) {
+            try {
+                await fetch(`${API_URL}/notes/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token()}`
+                    }
+                });
+                fetchNotes();
+                Swal.fire({
+                    text: "Deleted Successfully!",
+                    icon: "success"
+                });
+            } catch (error) {
+                Swal.fire({
+                    text: "An error occurred while deleting!",
+                    icon: "error"
+                });
+            }
+        }
+    };
+
     return (
         <html lang="en">
 
@@ -92,12 +170,12 @@ const Notes = () => {
 
                 <div id="wrapper">
 
-                    <Sidebar></Sidebar>
+                    <Sidebar hide={hide}></Sidebar>
 
                     <div id="content-wrapper" className="d-flex flex-column" >
                         <div id="content">
 
-                            <Topnav></Topnav>
+                            <Topnav toggleSidebar={toggleSidebar}></Topnav>
 
                             <div className="container-fluid" style={{ textAlign: 'left', overflow: 'auto', maxHeight: '550px' }}>
 
@@ -117,7 +195,7 @@ const Notes = () => {
                                 {/* TABLE TEXT */}
                                 <div className="card shadow mb-4">
                                     <div className="card-header py-3">
-                                        <h6 className="m-0 font-weight-bold text-primary">DataTables Example</h6>
+                                        <h6 className="m-0 font-weight-bold text-primary">Notes Table</h6>
                                     </div>
                                     <div className="card-body">
                                         <div className="table-responsive">
@@ -126,7 +204,7 @@ const Notes = () => {
                                                     <tr>
                                                         <th>Title</th>
                                                         <th>Author</th>
-                                                        <th>Download</th>
+                                                        <th>Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -134,7 +212,13 @@ const Notes = () => {
                                                         <tr key={element.notes_id}>
                                                             <td>{element.title}</td>
                                                             <td>{element.author}</td>
-                                                            <td><a href={element.path}>download</a></td>
+                                                            <td>
+                                                                <a href={element.path}>download</a>
+                                                                &nbsp;
+                                                                {isAdmin && (
+                                                                    <span style={{ color: 'blue', cursor: 'pointer' }} onClick={() => { handleDelete(element.notes_id) }}>Delete</span>
+                                                                )}
+                                                            </td>
                                                         </tr>
                                                     ))}
                                                 </tbody>
@@ -171,8 +255,11 @@ const Notes = () => {
                                         </div>
                                         <div className="form-group">
                                             <div style={{ float: 'left' }}>
-                                                <input type="file" onChange={(e) => setFile(e.target.files[0])} required />
-                                            </div>
+                                                <input type="file"
+                                                    accept=".doc, .doxc, .pdf, .txt, .ppt, .pptx"
+                                                    onChange={(e) => setFile(e.target.files[0])} required />
+                                                <small className="form-text text-muted" style={{ marginLeft: '-175px' }}>Upload document.</small>
+                                            </div><br></br>
                                         </div><br></br>
                                     </div>
                                     <div className="modal-footer">

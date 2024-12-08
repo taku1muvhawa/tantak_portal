@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../sidebar";
 import Topnav from "../TopNav";
-import { API_URL } from "../config";
+import { API_URL, token } from "../config";
 import Swal from "sweetalert2";
 import { ClipLoader, BarLoader } from 'react-spinners';
 import '../Courses/Courses.css'
+import { getCurrentDate } from "../Components/DateFunction";
+import { useNavigate } from "react-router-dom";
 
 const Lessons = () => {
     const [dataSource, setDataSource] = useState([]);
@@ -14,21 +16,52 @@ const Lessons = () => {
     const [adminId] = useState(localStorage.getItem('Admin'));
     const [teacherId] = useState(localStorage.getItem('teacher'));
     const [showAddModal, setShowAddModal] = useState(false);
+    const [populated, setSubscribed] = useState(false);
+    const [textHeader, setTextHeader] = useState('');
+    const [text, setText] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [lesson_no, setLesson_no] = useState('');
     const [topic, setTopic] = useState('');
     const [objectives, setObjectives] = useState('');
     const [release_date, setRelease_date] = useState('');
     const [file, setFile] = useState('');
+    const navigate = useNavigate();
+
+    const [hide, setHide] = useState(false);
+
+    const toggleSidebar = () => {
+        setHide(prevHide => !prevHide); // Toggle the hide state
+    };
+
+    useEffect(() => {
+        if (localStorage.getItem('sd') !== "true") {
+            navigate('/courses')
+        } 
+
+    }, [])
 
     const fetchLessons = async () => {
         try {
-            const response = await fetch(`${API_URL}/lessons/mod/${moduleId}`);
+            const response = await fetch(`${API_URL}/lessons/mod/${moduleId}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token()}`
+                }
+            });
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
             const data = await response.json();
             setDataSource(data);
+
+            if (data.length < 1) {
+                setSubscribed(false);
+                setTextHeader(`No lessons available in this module!`)
+                setText(`To get started click "Upload Lesson" 
+                    button and enter lesson details and select lesson video.`)
+            } else {
+                setSubscribed(true);
+            }
         } catch (error) {
             console.error("Error fetching colleges:", error);
         }
@@ -36,12 +69,36 @@ const Lessons = () => {
 
     useEffect(() => {
         fetchLessons();
+        setRelease_date(getCurrentDate());
     }, []);
+
+    const checkSub = async () => {
+        try {
+            const response = await fetch(`${API_URL}/subscriptions/student/${userId}/${moduleId}/${getCurrentDate()}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token()}`
+                }
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            if (data.length < 1) {
+                navigate('/courses');
+            }
+            console.log(data.length);
+        } catch (error) {
+            console.error("Error fetching colleges:", error);
+        }
+    };
 
     useEffect(() => {
         const checkAdmin = () => {
             if (userId === adminId || userId === teacherId) {
                 setIsAdmin(true);
+            }else{
+                checkSub();
             }
         };
 
@@ -72,6 +129,9 @@ const Lessons = () => {
             // Upload Assignment
             const response = await fetch(`${API_URL}/lessons/lesson`, {
                 method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token()}`
+                },
                 body: formData,
             });
 
@@ -98,6 +158,45 @@ const Lessons = () => {
         setShowAddModal(true);
     };
 
+    const handleDelete = async (id) => {
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+        });
+
+        if (result.isConfirmed) {
+            try {
+                await fetch(`${API_URL}/lessons/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token()}`
+                    }
+                });
+                fetchLessons();
+                Swal.fire({
+                    text: "Deleted Successfully!",
+                    icon: "success"
+                });
+            } catch (error) {
+                Swal.fire({
+                    text: "An error occurred while deleting!",
+                    icon: "error"
+                });
+            }
+        }
+    };
+
+    document.addEventListener(
+        "contextmenu", function(e)
+        {
+            e.preventDefault();
+        }, false
+    )
+
     return (
         <html lang="en">
 
@@ -105,20 +204,20 @@ const Lessons = () => {
 
                 <div id="wrapper">
 
-                    <Sidebar></Sidebar>
+                    <Sidebar hide={hide}></Sidebar>
 
                     <div id="content-wrapper" className="d-flex flex-column" >
                         <div id="content">
 
-                            <Topnav></Topnav>
+                            <Topnav toggleSidebar={toggleSidebar}></Topnav>
 
                             <div className="container-fluid" style={{ textAlign: 'left', overflow: 'auto', maxHeight: '550px' }}>
 
                                 {isAdmin && (
                                     <div className="d-sm-flex align-items-center justify-content-between mb-4">
                                         {/* <h1 className="h3 mb-0 text-gray-800"></h1> */}
-                                        <div style={{ width: '100%'}}>
-                                            <button onClick={openModal} style={{float: 'right'}} className="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" ><i
+                                        <div style={{ width: '100%' }}>
+                                            <button onClick={openModal} style={{ float: 'right' }} className="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" ><i
                                                 className="fas fa-upload fa-sm text-white-50"></i> Upload Lesson</button>
                                         </div>
                                     </div>
@@ -134,13 +233,13 @@ const Lessons = () => {
                                                 <h2 style={{ fontSize: '18px' }}>Lesson {element.lesson_no}
                                                     {isAdmin && (
                                                         <div style={{ width: '95%' }}>
-                                                            <button className="btn btn-danger" style={{ float: 'right' }}>Delete</button>
+                                                            <button className="btn btn-danger" style={{ float: 'right' }} onClick={() => handleDelete(element.lesson_id)}>Delete</button>
                                                         </div>
                                                     )}
                                                 </h2>
                                                 <h3 style={{ fontSize: '16px' }}>Topic: {element.topic}</h3>
                                                 <h4 style={{ fontSize: '16px' }}>Objectives: {element.objectives}</h4>
-                                                <video className="video" width="95%px" height="55%" controls>
+                                                <video className="video" width="95%px" height="55%" controls controlsList="nodownload">
                                                     <source src={element.video} type="video/mp4" />
                                                     Your browser does not support the video tag.
                                                 </video>
@@ -148,6 +247,15 @@ const Lessons = () => {
                                         </tbody>
                                     ))}
                                 </table>
+
+                                {!populated && isAdmin && (
+                                    <>
+                                        <div>
+                                            <p style={{ fontSize: '18px', textAlign: 'center' }}><b>{textHeader}</b></p>
+                                            <p style={{ fontSize: '16px', textAlign: 'center' }}>{text}</p>
+                                        </div>
+                                    </>
+                                )}
 
                             </div>
                         </div>
@@ -177,16 +285,19 @@ const Lessons = () => {
                                         </div>
                                         <div className="form-group">
                                             <label className="modal-label">Objectives</label>
-                                            <input type="textarea" className="form-control" value={objectives} onChange={(e) => setObjectives(e.target.value)} required />
+                                            <textarea type="textarea" className="form-control" value={objectives} onChange={(e) => setObjectives(e.target.value)} required />
                                         </div>
-                                        <div className="form-group">
+                                        {/* <div className="form-group">
                                             <label className="modal-label">Release date</label>
                                             <input type="date" className="form-control" value={release_date} onChange={(e) => setRelease_date(e.target.value)} required />
-                                        </div>
-                                        <div className="form-group">
+                                        </div> */}
+                                       <div className="form-group">
                                             <div style={{ float: 'left' }}>
-                                                <input type="file" onChange={handleFileUpload} required />
-                                            </div>
+                                                <input type="file"
+                                                    accept="video/*"
+                                                    onChange={handleFileUpload} required />
+                                                <small className="form-text text-muted" style={{ marginLeft: '-165px' }}>Upload lesson video.</small>
+                                            </div><br></br>
                                         </div><br></br>
                                     </div>
                                     <div className="modal-footer">

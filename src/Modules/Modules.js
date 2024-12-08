@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from "react"; // Import useState
 import Sidebar from "../sidebar";
 import Topnav from "../TopNav";
-import { API_URL } from "../config";
+import { API_URL, token } from "../config";
 import '../Courses/Courses.css'
 
 const Modules = () => {
     const [dataSource, setDataSource] = useState([]);
     const [levelId] = useState(localStorage.getItem('levelId'))
     const [countLevel, setCountLevel] = useState(true);
+    const [courseName, setCourseName] = useState('...Loading');
+    const [hide, setHide] = useState(false);
+
+    const toggleSidebar = () => {
+        setHide(prevHide => !prevHide); // Toggle the hide state
+    };
 
     const handleChannelClick = (id, teacher, price) => {
         localStorage.setItem('moduleId',id );
@@ -15,9 +21,32 @@ const Modules = () => {
         localStorage.setItem('price',price );
     };
 
+    const checkCourseName = async () => {
+        try {
+            const response = await fetch(`${API_URL}/courses/${levelId}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token()}`
+                }
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            setCourseName(data[0].name);
+        } catch (error) {
+            console.error("Error fetching colleges:", error);
+        }
+    }
+
     const fetchModules = async () => {
         try {
-            const response = await fetch(`${API_URL}/modules/course/${levelId}`);
+            const response = await fetch(`${API_URL}/modules/course/${levelId}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token()}`
+                }
+            });
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -32,6 +61,7 @@ const Modules = () => {
     };
 
     useEffect(() => {
+        checkCourseName();
         fetchModules();
     }, []);
 
@@ -42,19 +72,19 @@ const Modules = () => {
 
                 <div id="wrapper">
 
-                    <Sidebar></Sidebar>
+                    <Sidebar hide={hide}></Sidebar>
 
                     <div id="content-wrapper" className="d-flex flex-column" >
                         <div id="content">
 
-                            <Topnav></Topnav>
+                            <Topnav title={courseName} toggleSidebar={toggleSidebar}></Topnav>
 
                             <div className="container-fluid" style={{ textAlign: 'left', overflow: 'auto', maxHeight: '550px' }}>
 
                                 {/* <!-- Page Heading --> */}
                                 <h1 className="h3 mb-4 text-gray-800" style={{ textAlign: 'left' }}>Select Module</h1>
                                 {!countLevel && (
-                                    <h4 className="h3 mb-4 text-gray-800" style={{ textAlign: 'left' }}>No Modules Available</h4>
+                                    <p style={{ fontSize: '18px', textAlign: 'center' }}><b>No Modules Available!</b></p>
                                 )}
                                 <div style={{backgroundColor: 'white'}}>
                                     <div className="courses-table">

@@ -1,17 +1,27 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../sidebar";
 import Topnav from "../TopNav";
-import { API_URL } from "../config";
+import { API_URL, token } from "../config";
 import '../Courses/Courses.css'
 
 const MyAccount = () => {
     const [dataSource, setDataSource] = useState([]);
     const [moduleId] = useState(localStorage.getItem('moduleId'));
     const [userId] = useState(localStorage.getItem('userId'));
+    const [hide, setHide] = useState(false);
+
+    const toggleSidebar = () => {
+        setHide(prevHide => !prevHide); // Toggle the hide state
+    };
 
     const fetchModules = async () => {
         try {
-            const response = await fetch(`${API_URL}/lessons/mod/${moduleId}`);
+            const response = await fetch(`${API_URL}/lessons/mod/${moduleId}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token()}`
+                }
+            });
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -24,7 +34,12 @@ const MyAccount = () => {
 
     const fetchSubscriptions = async () => {
         try {
-            const response = await fetch(`${API_URL}/subscriptions/student/${userId}`);
+            const response = await fetch(`${API_URL}/subscriptions/student/${userId}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token()}`
+                }
+            });
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -47,12 +62,12 @@ const MyAccount = () => {
 
                 <div id="wrapper">
 
-                    <Sidebar></Sidebar>
+                    <Sidebar hide={hide}></Sidebar>
 
                     <div id="content-wrapper" className="d-flex flex-column" >
                         <div id="content">
 
-                            <Topnav></Topnav>
+                            <Topnav toggleSidebar={toggleSidebar}></Topnav>
 
                             <div className="container-fluid" style={{ textAlign: 'left', overflow: 'auto', maxHeight: '550px' }}>
 

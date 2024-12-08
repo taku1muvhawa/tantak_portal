@@ -8,6 +8,11 @@ const MyProfile = () => {
     const [surname, setSurname] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
+    const [hide, setHide] = useState(false);
+
+    const toggleSidebar = () => {
+        setHide(prevHide => !prevHide); // Toggle the hide state
+    };
 
     useEffect(() => {
         if (localStorage.getItem('user') === null) {
@@ -31,16 +36,16 @@ const MyProfile = () => {
 
                 <div id="wrapper">
 
-                    <Sidebar></Sidebar>
+                    <Sidebar hide={hide}></Sidebar>
 
                     <div id="content-wrapper" className="d-flex flex-column" >
                         <div id="content">
 
-                            <Topnav></Topnav>
+                            <Topnav title="My Profile" toggleSidebar={toggleSidebar}></Topnav>
 
                             <div className="container-fluid" style={{ textAlign: 'left', overflow: 'auto', maxHeight: '550px', scrollbarWidth: 'none', background: 'white' }}>
 
-                                <h1 className="h3 mb-4 text-gray-800" style={{ textAlign: 'left' }}>My Profile</h1>
+                                <h1 className="h3 mb-4 text-gray-800" style={{ textAlign: 'left' }}></h1>
 
                                 <div className="user-wrapper">
                                     <div className="row">
@@ -59,6 +64,7 @@ const MyProfile = () => {
                                             <h4>Status: Active</h4>
                                         </div>
                                     </div>
+                                        <br></br>
                                 </div>
                             </div>
 

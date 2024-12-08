@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../sidebar";
 import Topnav from "../TopNav";
-import { API_URL } from "../config";
+import { API_URL, token } from "../config";
 import Swal from "sweetalert2";
 import '../Courses/Courses.css'
 
@@ -21,6 +21,12 @@ const Settings = () => {
         ConfirmPassword: ''
     });
 
+    const [hide, setHide] = useState(false);
+
+    const toggleSidebar = () => {
+        setHide(prevHide => !prevHide); // Toggle the hide state
+    };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -28,7 +34,12 @@ const Settings = () => {
 
     const fetchModules = async () => {
         try {
-            const response = await fetch(`${API_URL}/subscriptions/student/${userId}/${moduleId}`);
+            const response = await fetch(`${API_URL}/subscriptions/student/${userId}/${moduleId}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token()}`
+                }
+            });
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -48,6 +59,8 @@ const Settings = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        console.log(formData);
 
         if (formData.newPassword === formData.ConfirmPassword) {
             try {
@@ -96,16 +109,16 @@ const Settings = () => {
 
                 <div id="wrapper">
 
-                    <Sidebar></Sidebar>
+                    <Sidebar hide={hide}></Sidebar>
 
                     <div id="content-wrapper" className="d-flex flex-column" >
                         <div id="content">
 
-                            <Topnav></Topnav>
+                            <Topnav title="Settings" toggleSidebar={toggleSidebar}></Topnav>
 
                             <div className="container-fluid" style={{ textAlign: 'left', overflow: 'auto', maxHeight: '550px' }}>
 
-                                <div style={{width: '90%'}}>
+                                <div style={{ width: '90%' }}>
                                     <h1 className="h3 mb-4 text-gray-800" style={{ textAlign: 'left' }}>Change Password</h1>
 
                                     <div className="row">

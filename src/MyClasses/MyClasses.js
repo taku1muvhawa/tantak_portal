@@ -7,7 +7,7 @@ import '../Courses/Courses.css'
 import { expDate } from "../Components/ExpDate";
 import { getCurrentDate } from "../Components/DateFunction";
 
-const MyCourses = () => {
+const MyClasses = () => {
     const navigate = useNavigate();
     const [dataSource, setDataSource] = useState([]);
     // const [moduleId, setmoduleId] = useState(localStorage.getItem('moduleId'));
@@ -24,7 +24,7 @@ const MyCourses = () => {
 
     const fetchModules = async () => {
         try {
-            const response = await fetch(`${API_URL}/subscriptions/student/${userId}/${getCurrentDate()}`, {
+            const response = await fetch(`${API_URL}/modules/teacher/${userId}}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token()}`
@@ -38,12 +38,12 @@ const MyCourses = () => {
             setDataSource(data);
             setCouuntMod(data.length);
 
-            if(data.length < 1){
+            if (data.length < 1) {
                 setSubscribed(false);
                 setTextHeader(`Welcome to TANTAK e-learning portal.`)
                 setText(`To get started click "Explore Colleges" 
                     in the sidebar and select available colleges and courses`)
-            }else{
+            } else {
                 setSubscribed(true);
             }
 
@@ -58,6 +58,7 @@ const MyCourses = () => {
 
     const functionNavigate = (id) => {
         localStorage.setItem('moduleId', id);
+        localStorage.setItem('Admin', userId);
         navigate('/dashboard');
     }
 
@@ -73,11 +74,11 @@ const MyCourses = () => {
                     <div id="content-wrapper" className="d-flex flex-column" >
                         <div id="content">
 
-                            <Topnav toggleSidebar={toggleSidebar}></Topnav>
+                            <Topnav title="My Classes" toggleSidebar={toggleSidebar}></Topnav>
 
                             <div className="container-fluid" style={{ textAlign: 'left', overflow: 'auto', maxHeight: '550px', scrollbarWidth: 'none' }}>
 
-                                <h1 className="h3 mb-4 text-gray-800" style={{ textAlign: 'left' }}>My Courses</h1>
+                                {/* <h1 className="h3 mb-4 text-gray-800" style={{ textAlign: 'left' }}>My Classes</h1> */}
 
                                 <div className="row mb-4">
                                     <div className="col-xl-4 col-md-6 mb-4">
@@ -85,7 +86,7 @@ const MyCourses = () => {
                                             <div className="card-body">
                                                 <div className="row no-gutters align-items-center">
                                                     <div className="col mr-2">
-                                                        <div className="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Modules Subscribed</div>
+                                                        <div className="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Modules</div>
                                                         <div className="h5 mb-0 font-weight-bold text-gray-800">{countMod}</div>
                                                     </div>
                                                     <div className="col-auto">
@@ -101,7 +102,7 @@ const MyCourses = () => {
                                             <div className="card-body">
                                                 <div className="row no-gutters align-items-center">
                                                     <div className="col mr-2">
-                                                        <div className="text-xs font-weight-bold text-success text-uppercase mb-1">Active Courses</div>
+                                                        <div className="text-xs font-weight-bold text-success text-uppercase mb-1">Active Modules</div>
                                                         <div className="h5 mb-0 font-weight-bold text-gray-800">{countMod}</div>
                                                     </div>
                                                     <div className="col-auto">
@@ -112,21 +113,7 @@ const MyCourses = () => {
                                         </div>
                                     </div>
 
-                                    <div className="col-xl-4 col-md-6 mb-4">
-                                        <div className="card border-left-danger shadow h-100 py-2">
-                                            <div className="card-body">
-                                                <div className="row no-gutters align-items-center">
-                                                    <div className="col mr-2">
-                                                        <div className="text-xs font-weight-bold text-danger text-uppercase mb-1">Courses Expiring Soon</div>
-                                                        <div className="h5 mb-0 font-weight-bold text-gray-800">0</div>
-                                                    </div>
-                                                    <div className="col-auto">
-                                                        <i className="las la-exclamation-triangle fa-2x text-gray-300"></i>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    
                                 </div>
 
                                 <div style={{ height: '35rem', overflowY: 'auto' }}>
@@ -138,17 +125,15 @@ const MyCourses = () => {
                                                         <th>College</th>
                                                         <th>Course</th>
                                                         <th>Module</th>
-                                                        <th>Expiry Date</th>
                                                         <th>Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     {dataSource.map((element) => (
-                                                        <tr key={element.subscription_id}>
+                                                        <tr key={element.module_id}> 
                                                             <td>{element.course_name} </td>
                                                             <td>{element.level_name} </td>
                                                             <td>{element.module_name}</td>
-                                                            <td>{element.exp_date.slice(0, 10)}</td>
                                                             <td>
                                                                 <button className="btn btn-primary" style={{ height: '35px' }} onClick={() => functionNavigate(element.module_id)}>
                                                                     Enter
@@ -163,14 +148,12 @@ const MyCourses = () => {
                                     {!subscribed && (
                                         <>
                                             <div>
-                                                <p style={{fontSize: '18px', textAlign: 'center'}}><b>{textHeader}</b></p>
-                                                <p style={{fontSize: '16px', textAlign: 'center'}}>{text}</p>
+                                                <p style={{ fontSize: '18px', textAlign: 'center' }}><b>{textHeader}</b></p>
+                                                <p style={{ fontSize: '16px', textAlign: 'center' }}>{text}</p>
                                             </div>
                                         </>
                                     )}
                                 </div>
-
-
                             </div>
                         </div>
 
@@ -186,7 +169,7 @@ const MyCourses = () => {
 
 };
 
-export default MyCourses;
+export default MyClasses;
 
 
 

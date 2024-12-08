@@ -4,11 +4,13 @@ import Topnav from "../TopNav";
 import { API_URL, token } from "../config";
 import Swal from 'sweetalert2';
 import { ClipLoader, BarLoader } from 'react-spinners';
-import '../Courses/Courses.css'
-import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import '../Courses/Courses.css';
 import { getCurrentDate } from "../Components/DateFunction";
+import { useNavigate } from "react-router-dom";
 
-const Feedback = () => {
+const Feedback2 = () => {
     const [dataSource, setDataSource] = useState([]);
     const [dataSource2, setDataSource2] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -23,7 +25,6 @@ const Feedback = () => {
     const [showUploadModal, setShowUploadModal] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
     const [file, setFile] = useState(null);
-    const navigate = useNavigate();
     const [hide, setHide] = useState(false);
 
     const toggleSidebar = () => {
@@ -35,7 +36,16 @@ const Feedback = () => {
     const [filteredStudents, setFilteredStudents] = useState([]);
     const [students, setStudents] = useState([]);
     const [studentId, setStudentId] = useState([]);
-    
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (localStorage.getItem('sd') !== "true") {
+            navigate('/courses')
+        } 
+
+    }, [])
+
     const fetchAssignments = async () => {
         try {
             const response = await fetch(`${API_URL}/assignments/mod/${moduleId}`, {
@@ -54,17 +64,9 @@ const Feedback = () => {
         }
     };
 
-
-    useEffect(() => {
-        if (localStorage.getItem('sd') !== "true") {
-            navigate('/courses')
-        } 
-
-    }, [])
-
     const fetchMarkAssignments = async () => {
         try {
-            const response = await fetch(`${API_URL}/feedback/marked/${moduleId}/${userId}`, {
+            const response = await fetch(`${API_URL}/feedback/marked/${moduleId}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token()}`
@@ -75,6 +77,7 @@ const Feedback = () => {
             }
             const data = await response.json();
             setDataSource2(data);
+            console.log(data)
         } catch (error) {
             console.error("Error fetching colleges:", error);
         }
@@ -82,7 +85,7 @@ const Feedback = () => {
 
     const fetchSubAssignments = async () => {
         try {
-            const response = await fetch(`${API_URL}/feedback/submitted/${moduleId}/${userId}`, {
+            const response = await fetch(`${API_URL}/feedback/submitted/${moduleId}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token()}`
@@ -93,13 +96,14 @@ const Feedback = () => {
             }
             const data = await response.json();
             setDataSource(data);
+            console.log(data)
         } catch (error) {
             console.error("Error fetching colleges:", error);
         }
     };
 
     const fetchStudents = async () => {
-        const response = await fetch(`${API_URL}/subscriptions/module/mod/${moduleId}`, {
+        const response = await fetch(`${API_URL}/subscriptions/module/mod/${moduleId}/${getCurrentDate()}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token()}`
@@ -109,6 +113,22 @@ const Feedback = () => {
         setStudents(data);
         setFilteredStudents(data);
     };
+
+    useEffect(() => {
+        fetchSubAssignments();
+        fetchMarkAssignments();
+        fetchAssignments();
+        fetchStudents();
+    }, []);
+
+    useEffect(() => {
+        const matches = students.filter(student =>
+            student.student_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (student.student_surname && student.student_surname.toLowerCase().includes(searchTerm.toLowerCase()))
+        );
+        setFilteredStudents(matches);
+
+    }, [searchTerm, students]);
 
     const checkSub = async () => {
         try {
@@ -130,22 +150,6 @@ const Feedback = () => {
             console.error("Error fetching colleges:", error);
         }
     };
-
-    useEffect(() => {
-        fetchSubAssignments();
-        fetchMarkAssignments();
-        fetchAssignments();
-        fetchStudents();
-    }, []);
-
-    useEffect(() => {
-        const matches = students.filter(student =>
-            student.student_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            (student.student_surname && student.student_surname.toLowerCase().includes(searchTerm.toLowerCase()))
-        );
-        setFilteredStudents(matches);
-
-    }, [searchTerm, students]);
 
     useEffect(() => {
         const checkAdmin = () => {
@@ -246,6 +250,39 @@ const Feedback = () => {
         }
     }
 
+    const handleDelete = async (id) => {
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+        });
+
+        if (result.isConfirmed) {
+            try {
+                await fetch(`${API_URL}/feedback/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token()}`
+                    },
+                });
+                fetchMarkAssignments();
+                Swal.fire({
+                    text: "Deleted Successfully!",
+                    icon: "success"
+                });
+            } catch (error) {
+                Swal.fire({
+                    text: "An error occurred while deleting!",
+                    icon: "error"
+                });
+            }
+        }
+    };
+
+
     return (
         <html lang="en">
 
@@ -288,18 +325,30 @@ const Feedback = () => {
                                                 <thead>
                                                     <tr>
                                                         <th>Date</th>
+                                                        <th>Name</th>
+                                                        <th>Surname</th>
                                                         <th>Topic</th>
                                                         <th>Type</th>
                                                         <th>Download</th>
+                                                        <th>Delete</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     {dataSource2.map((element) => (
                                                         <tr key={element.feedback_id}>
                                                             <td>{element.date.slice(0, 10)}</td>
+                                                            <td>{element.name}</td>
+                                                            <td>{element.surname}</td>
                                                             <td>{element.topic}</td>
                                                             <td>{element.type}</td>
                                                             <td><a href={element.path}>download</a></td>
+                                                            <td>
+                                                                <div className="d-flex align-items-center">
+                                                                    <button type="button" className="btn btn-link" onClick={() => handleDelete(element.feedback_id)}>
+                                                                        <FontAwesomeIcon icon={faTrash} />
+                                                                    </button>
+                                                                </div>
+                                                            </td>
                                                         </tr>
                                                     ))}
                                                 </tbody>
@@ -319,6 +368,8 @@ const Feedback = () => {
                                                 <thead>
                                                     <tr>
                                                         <th>Date</th>
+                                                        <th>Name</th>
+                                                        <th>Surname</th>
                                                         <th>Topic</th>
                                                         <th>Type</th>
                                                         <th>Download</th>
@@ -328,6 +379,8 @@ const Feedback = () => {
                                                     {dataSource.map((element) => (
                                                         <tr key={element.feedback_id}>
                                                             <td>{element.date.slice(0, 10)}</td>
+                                                            <td>{element.name}</td>
+                                                            <td>{element.surname}</td>
                                                             <td>{element.topic}</td>
                                                             <td>{element.type}</td>
                                                             <td><a href={element.path}>download</a></td>
@@ -375,11 +428,8 @@ const Feedback = () => {
                                         </div>
                                         <div className="form-group">
                                             <div style={{ float: 'left' }}>
-                                                <input type="file"
-                                                    accept=".doc, .doxc, .pdf, .txt, .ppt, .pptx"
-                                                    onChange={(e) => setFile(e.target.files[0])} required />
-                                                <small className="form-text text-muted" style={{ marginLeft: '-175px' }}>Upload document.</small>
-                                            </div><br></br>
+                                                <input type="file" onChange={(e) => setFile(e.target.files[0])} required />
+                                            </div>
                                         </div><br></br>
                                     </div>
                                     <div className="modal-footer">
@@ -459,8 +509,11 @@ const Feedback = () => {
                                         </div>
                                         <div className="form-group">
                                             <div style={{ float: 'left' }}>
-                                                <input type="file" onChange={(e) => setFile(e.target.files[0])} required />
-                                            </div>
+                                                <input type="file"
+                                                    accept=".doc, .doxc, .pdf, .txt, .ppt, .pptx"
+                                                    onChange={(e) => setFile(e.target.files[0])} required />
+                                                <small className="form-text text-muted" style={{ marginLeft: '-175px' }}>Upload document.</small>
+                                            </div><br></br>
                                         </div><br></br>
                                     </div>
                                     <div className="modal-footer">
@@ -481,4 +534,4 @@ const Feedback = () => {
 
 };
 
-export default Feedback;
+export default Feedback2;

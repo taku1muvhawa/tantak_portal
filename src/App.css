@@ -361,4 +361,7 @@
   .sidebar-menu a{
       font-size: 0.8rem;
   }
+  .course-img{
+    display: none;
+  }
 }

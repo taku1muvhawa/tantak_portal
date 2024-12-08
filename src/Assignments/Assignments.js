@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../sidebar";
 import Topnav from "../TopNav";
-import { API_URL } from "../config";
+import { API_URL, token } from "../config";
 import Swal from "sweetalert2";
 import '../Courses/Courses.css';
+import { useNavigate } from "react-router-dom";
+import { getCurrentDate } from "../Components/DateFunction";
 
 const Assignments = () => {
     const [dataSource, setDataSource] = useState([]);
@@ -16,15 +18,55 @@ const Assignments = () => {
     const [type, setType] = useState('');
     const [showAddModal, setShowAddModal] = useState(false);
     const [file, setFile] = useState(null);
+    const navigate = useNavigate();
 
+    const [hide, setHide] = useState(false);
+
+    const toggleSidebar = () => {
+        setHide(prevHide => !prevHide); // Toggle the hide state
+    };
+
+    const checkSub = async () => {
+        try {
+            const response = await fetch(`${API_URL}/subscriptions/student/${userId}/${moduleId}/${getCurrentDate()}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token()}`
+                }
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            if (data.length < 1) {
+                navigate('/courses');
+            }
+            console.log(data.length);
+        } catch (error) {
+            console.error("Error fetching colleges:", error);
+        }
+    };
 
     const handleShowModal = () => {
         setShowAddModal(true);
     };
 
+
+    useEffect(() => {
+        if (localStorage.getItem('sd') !== "true") {
+            navigate('/courses')
+        }
+
+    }, [])
+
     const fetchAssignments = async () => {
         try {
-            const response = await fetch(`${API_URL}/assignments/mod/${moduleId}`);
+            const response = await fetch(`${API_URL}/assignments/mod/${moduleId}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token()}`,
+                }
+            });
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -43,6 +85,8 @@ const Assignments = () => {
         const checkAdmin = () => {
             if (userId === adminId || userId === teacherId) {
                 setIsAdmin(true);
+            }else{
+                checkSub();
             }
         };
 
@@ -66,6 +110,9 @@ const Assignments = () => {
             // Upload Assignment
             const response = await fetch(`${API_URL}/assignments/assignment`, {
                 method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token()}`, 
+                },
                 body: formData,
             });
 
@@ -86,13 +133,45 @@ const Assignments = () => {
         }
     };
 
+    const handleDelete = async (id) => {
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+        });
+
+        if (result.isConfirmed) {
+            try {
+                await fetch(`${API_URL}/assignments/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token()}`, 
+                    }
+                });
+                fetchAssignments();
+                Swal.fire({
+                    text: "Deleted Successfully!",
+                    icon: "success"
+                });
+            } catch (error) {
+                Swal.fire({
+                    text: "An error occurred while deleting!",
+                    icon: "error"
+                });
+            }
+        }
+    };
+
     return (
         <div lang="en" id="page-top">
             <div id="wrapper">
-                <Sidebar />
+                <Sidebar hide={hide}/>
                 <div id="content-wrapper" className="d-flex flex-column">
                     <div id="content">
-                        <Topnav />
+                        <Topnav  toggleSidebar={toggleSidebar}/>
                         <div className="container-fluid" style={{ textAlign: 'left', overflow: 'auto', maxHeight: '550px' }}>
                             {!isAdmin ? (
                                 <h1 className="h3 mb-4 text-gray-800">Assignments</h1>
@@ -126,7 +205,12 @@ const Assignments = () => {
                                                         <td>{element.date.slice(0, 10)}</td>
                                                         <td>{element.topic}</td>
                                                         <td>{element.type}</td>
-                                                        <td><a href={element.path} download>Download</a></td>
+                                                        <td>
+                                                            <a href={element.path} download>Download</a> &nbsp;
+                                                            {isAdmin && (
+                                                                <span style={{ color: 'blue', cursor: 'pointer' }} onClick={() => { handleDelete(element.assignment_id) }}>Delete</span>
+                                                            )}
+                                                        </td>
                                                     </tr>
                                                 ))}
                                             </tbody>
@@ -160,8 +244,11 @@ const Assignments = () => {
                                     </div>
                                     <div className="form-group">
                                         <div style={{ float: 'left' }}>
-                                            <input type="file" onChange={(e) => setFile(e.target.files[0])} required />
-                                        </div>
+                                            <input type="file"
+                                                accept=".doc, .doxc, .pdf, .txt, .ppt, .pptx"
+                                                onChange={(e) => setFile(e.target.files[0])} required />
+                                            <small className="form-text text-muted" style={{ marginLeft: '-100px' }}>Upload assignment document.</small>
+                                        </div><br></br>
                                     </div><br></br>
                                 </div>
                                 <div className="modal-footer">

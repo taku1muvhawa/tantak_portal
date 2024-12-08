@@ -3,11 +3,13 @@ import Sidebar from "../sidebar";
 import Topnav from "../TopNav";
 import { API_URL, token } from "../config";
 import Swal from "sweetalert2";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import '../Courses/Courses.css'
 import { getCurrentDate } from "../Components/DateFunction";
 import { useNavigate } from "react-router-dom";
 
-const Results = () => {
+const Results2 = () => {
     const [dataSource, setDataSource] = useState([]);
     const [moduleId] = useState(localStorage.getItem('moduleId'));
     const [userId] = useState(localStorage.getItem('userId'));
@@ -26,20 +28,6 @@ const Results = () => {
     // const [assignment_id, setAssignment_id] = useState([]);
     const [totalPM, setTotalPM] = useState('');
 
-    const navigate = useNavigate();
-    const [hide, setHide] = useState(false);
-
-    const toggleSidebar = () => {
-        setHide(prevHide => !prevHide); // Toggle the hide state
-    };
-
-    useEffect(() => {
-        if (localStorage.getItem('sd') !== "true") {
-            navigate('/courses')
-        }
-
-    }, [])
-
     const [formData, setFormData] = useState({
         module_id: moduleId,
         student_id: '',
@@ -50,9 +38,23 @@ const Results = () => {
         grade: ''
     });
 
+    const navigate = useNavigate();
+    const [hide, setHide] = useState(false);
+
+    const toggleSidebar = () => {
+        setHide(prevHide => !prevHide); // Toggle the hide state
+    };
+
+    useEffect(() => {
+        if (localStorage.getItem('sd') !== "true") {
+            navigate('/courses')
+        } 
+
+    }, [])
+
     const fetchResults = async () => {
         try {
-            const response = await fetch(`${API_URL}/results/mod/${moduleId}/${userId}`, {
+            const response = await fetch(`${API_URL}/results/mod/${moduleId}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token()}`
@@ -166,9 +168,10 @@ const Results = () => {
             // Post results
             const response = await fetch(`${API_URL}/results`, {
                 method: 'POST',
-                headers: { 
+                headers: {
+                    'Authorization': `Bearer ${token()}`,
                     'Content-Type': 'application/json'
-                 },
+                },
                 body: JSON.stringify(formData),
             });
 
@@ -180,6 +183,7 @@ const Results = () => {
             });
 
             fetchResults(); // Fetch updated assignments
+            resetFormData();
         } catch (error) {
             Swal.fire({
                 text: error.message || "An error occurred!",
@@ -187,6 +191,51 @@ const Results = () => {
             });
         }
     }
+
+    const handleDelete = async (id) => {
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel!',
+        });
+
+        if (result.isConfirmed) {
+            try {
+                await fetch(`${API_URL}/results/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token()}`
+                    }
+                });
+                fetchResults();
+                Swal.fire({
+                    text: "Deleted Successfully!",
+                    icon: "success"
+                });
+            } catch (error) {
+                Swal.fire({
+                    text: "An error occurred while deleting!",
+                    icon: "error"
+                });
+            }
+        }
+    };
+
+    const resetFormData = () => {
+        setFormData({
+            module_id: moduleId,
+            student_id: '',
+            assignment_id: '',
+            marks: '',
+            total_possible: '',
+            percentage: '',
+            grade: ''
+        });
+    }
+
 
     return (
         <html lang="en">
@@ -228,20 +277,32 @@ const Results = () => {
                                                 <thead>
                                                     <tr>
                                                         <th>Date</th>
+                                                        <th>Name</th>
+                                                        <th>Surname</th>
                                                         <th>Assignment</th>
                                                         <th>Marks</th>
                                                         <th>Percentage</th>
                                                         <th>Grade</th>
+                                                        <th>Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     {dataSource.map((element) => (
                                                         <tr key={element.result_id}>
                                                             <td>{element.date.slice(0, 10)}</td>
+                                                            <td>{element.name}</td>
+                                                            <td>{element.surname}</td>
                                                             <td>{element.topic}</td>
                                                             <td>{element.marks} / {element.total_possible}</td>
                                                             <td>{element.percentage}%</td>
                                                             <td>{element.grade}</td>
+                                                            <td>
+                                                                <div className="d-flex align-items-center">
+                                                                    <button type="button" className="btn btn-link" onClick={() => handleDelete(element.result_id)}>
+                                                                        <FontAwesomeIcon icon={faTrash} />
+                                                                    </button>
+                                                                </div>
+                                                            </td> 
                                                         </tr>
                                                     ))}
                                                 </tbody>
@@ -344,4 +405,4 @@ const Results = () => {
 
 };
 
-export default Results;
+export default Results2;

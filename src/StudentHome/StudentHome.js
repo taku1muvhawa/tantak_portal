@@ -10,10 +10,11 @@ import {
     faClipboardCheck
 } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
-import { API_URL } from "../config";
+import { API_URL, token } from "../config";
 import { expDate } from "../Components/ExpDate";
 import Swal from "sweetalert2";
 import { ClipLoader } from 'react-spinners';
+import { getCurrentDate } from "../Components/DateFunction";
 
 const StudentHome = () => {
 
@@ -21,7 +22,7 @@ const StudentHome = () => {
     const [dataSource, setDataSource] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [moduleId] = useState(localStorage.getItem('moduleId'));
-    const [courseId] = useState(localStorage.getItem('moduleId'));
+    const [courseId] = useState(localStorage.getItem('levelId'));
     const [userId] = useState(localStorage.getItem('userId'));
     const [price] = useState(localStorage.getItem('price'));
     const [lessonCount, setLessonCount] = useState('');
@@ -35,8 +36,14 @@ const StudentHome = () => {
     const [isAdmin, setIsAdmin] = useState(false);
     const [adminId] = useState(localStorage.getItem('Admin'));
     const [teacherId] = useState(localStorage.getItem('teacher'));
+    const [moduleName, setModuleName] = useState('...Loading');
 
     const [subscription, setSubscription] = useState('...Loading')
+    const [hide, setHide] = useState(false);
+
+    const toggleSidebar = () => {
+        setHide(prevHide => !prevHide); // Toggle the hide state
+    };
 
     //Subcription
     const [formData] = useState({
@@ -47,10 +54,33 @@ const StudentHome = () => {
         exp_date: expDate()
     });
 
+    const checkModuleName = async () => {
+        try {
+            const response = await fetch(`${API_URL}/modules/${moduleId}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token()}`
+                }
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            setModuleName(data[0].name);
+        } catch (error) {
+            console.error("Error fetching colleges:", error);
+        }
+    }
+
     useEffect(() => {
         const fetchCounts = async () => {
             try {
-                const lessonResponse = await fetch(`${API_URL}/lessons/mod/${moduleId}`);
+                const lessonResponse = await fetch(`${API_URL}/lessons/mod/${moduleId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token()}`
+                    }
+                });
                 const lesson = await lessonResponse.json();
                 setLessonCount(lesson.length);
                 setDataSource(lesson);
@@ -58,25 +88,34 @@ const StudentHome = () => {
                 console.error('Error fetching data:', error);
             }
             try {
-                const assignmentResponse = await fetch(`${API_URL}/assignments/mod/${moduleId}`);
+                const assignmentResponse = await fetch(`${API_URL}/assignments/mod/${moduleId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token()}`
+                    }
+                });
                 const assignment = await assignmentResponse.json();
                 setAssignmentCount(assignment.length);
 
-                const noteResponse = await fetch(`${API_URL}/notes/mod/${moduleId}`);
+                const noteResponse = await fetch(`${API_URL}/notes/mod/${moduleId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token()}`
+                    }
+                });
                 const note = await noteResponse.json();
                 setNoteCount(note.length);
 
-                const resultResponse = await fetch(`${API_URL}/results/mod/${moduleId}/${userId}`);
-                const result = await resultResponse.json();
-                setResultCount(result.length);
-
-                const feedbackResponse = await fetch(`${API_URL}/feedback/marked/${moduleId}/${userId}`);
-                const feedback = await feedbackResponse.json();
-                setFeedbackCount(feedback.length);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
+
+        const reg = "true"
+        localStorage.setItem('sd', reg);
+
+        checkModuleName();
+        checkAdmin();
         expDate();
         fetchCounts();
     }, []);
@@ -115,7 +154,9 @@ const StudentHome = () => {
     }
 
     const functionResults = () => {
-        if (isSubscribed) {
+        if (isAdmin) {
+            navigate('/results2');
+        } else if (isSubscribed) {
             navigate('/results');
         } else {
             Swal.fire({
@@ -126,7 +167,9 @@ const StudentHome = () => {
     }
 
     const functionFeedback = () => {
-        if (isSubscribed) {
+        if (isAdmin) {
+            navigate('/feedback2');
+        } else if (isSubscribed) {
             navigate('/feedback');
         } else {
             Swal.fire({
@@ -138,7 +181,12 @@ const StudentHome = () => {
 
     const checkSub = async () => {
         try {
-            const response = await fetch(`${API_URL}/subscriptions/student/${userId}/${moduleId}`);
+            const response = await fetch(`${API_URL}/subscriptions/student/${userId}/${moduleId}/${getCurrentDate()}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token()}`
+                }
+            });
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -158,32 +206,87 @@ const StudentHome = () => {
     };
 
 
-    // useEffect(() => {
-    //     checkSub();
-    // }, [])
+    const checkAdmin = () => {
+        if (userId === adminId || userId === teacherId) {
+            setIsAdmin(true);
+            console.log(isAdmin);
+            setIsSubscribed(true);
+            setSubscription('Admin');
 
-    useEffect(() => {
-        const checkAdmin = () => {
-            if (userId === adminId || userId === teacherId) {
-                setIsAdmin(true);
-                console.log(isAdmin);
-                setIsSubscribed(true);
-                setSubscription('Admin');
-            }else{
-                checkSub();
+            const fetchCounts = async () => {
+                try {
+
+                    const resultResponse = await fetch(`${API_URL}/results/mod/${moduleId}/`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token()}`
+                        }
+                    });
+                    const result = await resultResponse.json();
+                    setResultCount(result.length);
+
+                    const feedbackResponse = await fetch(`${API_URL}/feedback/marked/${moduleId}`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token()}`
+                        }
+                    });
+                    const feedback = await feedbackResponse.json();
+                    setFeedbackCount(feedback.length);
+
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
             }
-        };
 
-        checkAdmin();
-    }, []);
+            fetchCounts();
+        } else {
+            checkSub();
 
-    const handleSubscribe = async (e) => {
-        e.preventDefault();
+            const fetchCounts = async () => {
+                try {
+                    const resultResponse = await fetch(`${API_URL}/results/mod/${moduleId}/${userId}`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token()}`
+                        }
+                    });
+                    const result = await resultResponse.json();
+                    setResultCount(result.length);
+
+                    const feedbackResponse = await fetch(`${API_URL}/feedback/marked/${moduleId}/${userId}`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token()}`
+                        }
+                    });
+                    const feedback = await feedbackResponse.json();
+                    setFeedbackCount(feedback.length);
+
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
+            }
+            fetchCounts();
+        }
+    };
+
+    const handleSubscribers = () => {
+        navigate('/subscribers');
+    }
+
+    const handleSubscribe = async () => {
+        // e.preventDefault();
 
         setIsLoading(true);
         console.log(formData);
 
         window.location.href = `${API_URL}/initiate-payment/${formData.course_id}/${formData.module_id}/${formData.student_id}/${formData.amount}/${formData.exp_date}`;
+
+        // const response = await fetch(`${API_URL}/initiate-payment/${formData.course_id}/${formData.module_id}/${formData.student_id}/${formData.amount}/${formData.exp_date}`, {
+        //     method: 'GET',
+        //     headers: { 'Content-Type': 'application/json' },
+        // });
 
         // try {
         //     // Post results
@@ -202,6 +305,28 @@ const StudentHome = () => {
         // }
     }
 
+    const handleConfirmSub = async (id) => {
+        if (lessonCount < 1) {
+            Swal.fire({
+                text: "No lessons available, this module is not active.",
+                icon: "info"
+            });
+            return;
+        }
+        const result = await Swal.fire({
+            // title: 'Subscribe module',
+            text: `The subscription is $${price} per month. You can pay using VISA, ECOCASH or INNBUCKS`,
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonText: 'Subscribe!',
+            cancelButtonText: 'Cancel!',
+        });
+
+        if (result.isConfirmed) {
+            handleSubscribe();
+        }
+    };
+
 
     return (
 
@@ -211,12 +336,12 @@ const StudentHome = () => {
 
                 <div id="wrapper">
 
-                    <Sidebar></Sidebar>
+                    <Sidebar hide={hide}></Sidebar>
 
                     <div id="content-wrapper" className="d-flex flex-column">
                         <div id="content" style={{ backgroundColor: 'rgba(217, 224, 224, 0.863)' }}>
 
-                            <Topnav></Topnav>
+                            <Topnav title={moduleName} toggleSidebar={toggleSidebar}></Topnav>
 
                             <div className="container-fluid" style={{ textAlign: 'left', overflow: 'auto', maxHeight: '550px', scrollbarWidth: 'none' }}>
 
@@ -332,7 +457,7 @@ const StudentHome = () => {
                                                     <p></p>
                                                 </div>
                                                 {!isSubscribed && !isLoading && (
-                                                    <button onClick={handleSubscribe} style={{ backgroundColor: 'white', color: '#675dc5', borderColor: '#675dc5' }}>Subscribe<span></span></button>
+                                                    <button onClick={handleConfirmSub} style={{ backgroundColor: 'white', color: '#675dc5', borderColor: '#675dc5' }}>Subscribe<span></span></button>
                                                 )}
                                                 {isLoading && (
                                                     <div style={{ marginTop: '8px', textAlign: 'center' }}>
@@ -341,8 +466,11 @@ const StudentHome = () => {
                                                         </div>
                                                     </div>
                                                 )}
-                                                {isSubscribed && (
+                                                {isSubscribed && !isAdmin && (
                                                     <button style={{ backgroundColor: 'white', color: '#675dc5', borderColor: '#675dc5' }}>Subscribed<span></span></button>
+                                                )}
+                                                {isAdmin && (
+                                                    <button onClick={handleSubscribers} style={{ backgroundColor: 'white', color: '#675dc5', borderColor: '#675dc5' }}>Subscribers<span></span></button>
                                                 )}
                                             </div>
                                         </div>
@@ -420,6 +548,32 @@ const StudentHome = () => {
                     </div>
 
                 </div>
+
+                {/* Submit Assignment Modal
+                {showAddModal && (
+                    <div className="modal fade show" style={{ display: 'block' }} onClick={() => setShowAddModal(false)}>
+                        <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
+                            <div className="modal-content" style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)', borderRadius: '8px' }}>
+                                <div className="modal-header">
+                                    <h5 className="modal-title">Subscription</h5>
+                                    <button type="button" className="close" onClick={() => setShowAddModal(false)}>&times;</button>
+                                </div>
+                                <form onSubmit={handleSubmit}>
+                                    <div className="modal-body">
+                                        <div className="form-group">
+                                            
+                                        </div>
+                                    </div>
+                                    <div className="modal-footer">
+                                        <button type="button" className="btn btn-secondary" onClick={() => setShowAddModal(false)}>Close</button>
+                                        <button type="submit" className="btn btn-primary">Subscribe</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                )}
+ */}
 
             </body>
 

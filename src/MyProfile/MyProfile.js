@@ -45,7 +45,7 @@ const MyProfile = () => {
 
                             <div className="container-fluid" style={{ textAlign: 'left', overflow: 'auto', maxHeight: '550px', scrollbarWidth: 'none', background: 'white' }}>
 
-                                <h1 className="h3 mb-4 text-gray-800" style={{ textAlign: 'left' }}></h1>
+                                {/* <h1 className="h3 mb-4 text-gray-800" style={{ textAlign: 'left' }}></h1> */}<br></br>
 
                                 <div className="user-wrapper">
                                     <div className="row">

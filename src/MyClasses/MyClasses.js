@@ -5,7 +5,6 @@ import { API_URL, token } from "../config";
 import { useNavigate } from 'react-router-dom';
 import '../Courses/Courses.css'
 import { expDate } from "../Components/ExpDate";
-import { getCurrentDate } from "../Components/DateFunction";
 
 const MyClasses = () => {
     const navigate = useNavigate();

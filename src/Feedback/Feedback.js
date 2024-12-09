@@ -268,11 +268,11 @@ const Feedback = () => {
                                 <div className="d-sm-flex align-items-center justify-content-between mb-4">
                                     <h1 className="h3 mb-0 text-gray-800">Feedback</h1>
                                     {!isAdmin && (
-                                        <button onClick={handleSubmitAssignmnt} className="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                                        <button onClick={handleSubmitAssignmnt} className=" d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                                             className="fas fa-upload fa-sm text-white-50"></i> Submit Assignment</button>
                                     )}
                                     {isAdmin && (
-                                        <button onClick={handleUploadAssignmnt} className="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                                        <button onClick={handleUploadAssignmnt} className=" d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                                             className="fas fa-upload fa-sm text-white-50"></i> Upload Marked Assignment</button>
                                     )}
                                 </div>

@@ -25,6 +25,7 @@ const Lessons = () => {
     const [objectives, setObjectives] = useState('');
     const [release_date, setRelease_date] = useState('');
     const [file, setFile] = useState('');
+    const [uploadProgress, setUploadProgress] = useState(0);
     const navigate = useNavigate();
 
     const [hide, setHide] = useState(false);
@@ -36,7 +37,7 @@ const Lessons = () => {
     useEffect(() => {
         if (localStorage.getItem('sd') !== "true") {
             navigate('/courses')
-        } 
+        }
 
     }, [])
 
@@ -97,7 +98,7 @@ const Lessons = () => {
         const checkAdmin = () => {
             if (userId === adminId || userId === teacherId) {
                 setIsAdmin(true);
-            }else{
+            } else {
                 checkSub();
             }
         };
@@ -112,6 +113,7 @@ const Lessons = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
+        setUploadProgress(0);
 
         try {
             const formData = new FormData();
@@ -126,25 +128,42 @@ const Lessons = () => {
 
             console.log([...formData]); // Log FormData entries for debugging
 
-            // Upload Assignment
-            const response = await fetch(`${API_URL}/lessons/lesson`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token()}`
-                },
-                body: formData,
-            });
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', `${API_URL}/lessons/lesson`, true);
+            xhr.setRequestHeader('Authorization', `Bearer ${token()}`);
 
-            if (!response.ok) throw new Error('Addition failed');
+            // Update progress event
+            xhr.upload.onprogress = (event) => {
+                if (event.lengthComputable) {
+                    const percentComplete = Math.round((event.loaded / event.total) * 100);
+                    setUploadProgress(percentComplete); // Update progress state
+                }
+            };
 
-            setShowAddModal(false);
-            Swal.fire({
-                text: "Assignment uploaded successfully!",
-                icon: "success"
-            });
-            setIsLoading(false);
+            xhr.onload = () => {
+                if (xhr.status === 200) {
+                    setShowAddModal(false);
+                    Swal.fire({
+                        text: "Lesson uploaded successfully!",
+                        icon: "success"
+                    });
+                    fetchLessons();
+                } else {
+                    throw new Error('Addition failed');
+                }
+                setIsLoading(false);
+            };
 
-            fetchLessons();
+            xhr.onerror = () => {
+                Swal.fire({
+                    text: "An error occurred!",
+                    icon: "error"
+                });
+                setIsLoading(false);
+            };
+
+            xhr.send(formData); // Send the form data
+
         } catch (error) {
             Swal.fire({
                 text: error.message || "An error occurred!",
@@ -191,8 +210,7 @@ const Lessons = () => {
     };
 
     document.addEventListener(
-        "contextmenu", function(e)
-        {
+        "contextmenu", function (e) {
             e.preventDefault();
         }, false
     )
@@ -217,7 +235,7 @@ const Lessons = () => {
                                     <div className="d-sm-flex align-items-center justify-content-between mb-4">
                                         {/* <h1 className="h3 mb-0 text-gray-800"></h1> */}
                                         <div style={{ width: '100%' }}>
-                                            <button onClick={openModal} style={{ float: 'right' }} className="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" ><i
+                                            <button onClick={openModal} style={{ float: 'right' }} className="d-sm-inline-block btn btn-sm btn-primary shadow-sm" ><i
                                                 className="fas fa-upload fa-sm text-white-50"></i> Upload Lesson</button>
                                         </div>
                                     </div>
@@ -291,7 +309,7 @@ const Lessons = () => {
                                             <label className="modal-label">Release date</label>
                                             <input type="date" className="form-control" value={release_date} onChange={(e) => setRelease_date(e.target.value)} required />
                                         </div> */}
-                                       <div className="form-group">
+                                        <div className="form-group">
                                             <div style={{ float: 'left' }}>
                                                 <input type="file"
                                                     accept="video/*"
@@ -299,6 +317,21 @@ const Lessons = () => {
                                                 <small className="form-text text-muted" style={{ marginLeft: '-165px' }}>Upload lesson video.</small>
                                             </div><br></br>
                                         </div><br></br>
+                                        {isLoading && (
+                                            <div className="form-group">
+                                                {/* <label className="modal-label">File Upload Progress</label> */}
+                                                <div style={{ width: '100%', height: '20px', backgroundColor: '#e0e0e0', borderRadius: '5px' }}>
+                                                    <div style={{
+                                                        width: `${uploadProgress}%`,
+                                                        height: '100%',
+                                                        backgroundColor: 'blue',
+                                                        borderRadius: '5px',
+                                                        transition: 'width 0.2s'
+                                                    }}></div>
+                                                </div>
+                                                <small>{uploadProgress}%</small>
+                                            </div>
+                                        )}
                                     </div>
                                     <div className="modal-footer">
                                         <button type="button" className="btn btn-secondary" onClick={() => setShowAddModal(false)}>Close</button>
@@ -318,6 +351,7 @@ const Lessons = () => {
                                             <BarLoader size={40} width={'100%'} color="blue" loading />
                                         </div>
                                     )}
+
                                 </form>
                             </div>
                         </div>

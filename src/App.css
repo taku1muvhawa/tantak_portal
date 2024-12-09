@@ -251,6 +251,28 @@
   padding-bottom: 16px;
 }
 
+/* SweetAlert2 Custom Styles */
+.swal2-popup {
+  width: 90% !important; /* Responsive width for small screens */
+  max-width: 400px; /* Set a maximum width */
+  font-size: 1.2em; /* Adjust font size */
+  margin: auto; /* Center the modal */
+  top: 50% !important; /* Center vertically */
+  transform: translateY(-50%); /* Adjust for vertical centering */
+}
+
+@media (max-width: 576px) {
+  .swal2-popup {
+      font-size: 1em; /* Smaller font size for mobile */
+      padding: 15px; /* Adjust padding */
+      /* Additional styles for mobile */
+  }
+  .swal2-title {
+      font-size: 1.5em; /* Adjust title size */
+  }
+}
+
+
 /*Testing*/
 @media only screen and (max-width:960px){
   .cards{

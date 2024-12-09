@@ -366,7 +366,7 @@ const Login = () => {
                                     <form onSubmit={validateOtp}>
                                         <div className="modal-body">
                                             <div className="form-group">
-                                                <label className="modal-label">Enter OTP sent to {otp} ({email}):</label>
+                                                <label className="modal-label">Enter OTP sent to ({email}):</label>
                                                 <input type="number" className="form-control" value={vOtp} onChange={(e) => setVOtp(e.target.value)} required />
                                             </div>
                                         </div>

@@ -333,6 +333,3 @@ const Lessons = () => {
 };
 
 export default Lessons;
-
-
-

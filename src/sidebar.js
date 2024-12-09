@@ -136,7 +136,7 @@ const Sidebar = ({ hide }) => {
                                 <li className="nav-item">
                                     <a className="nav-link collapsed" href="mychannel" data-toggle="collapse" data-target="#collapseTwo"
                                         aria-expanded="true" aria-controls="collapseTwo">
-                                        <i className="fas fa-fw fa-fa-building"></i>
+                                        <i className="fas fa-fw fa-building"></i>
                                         <span>Admin Dashboard</span>
                                     </a>
                                 </li>

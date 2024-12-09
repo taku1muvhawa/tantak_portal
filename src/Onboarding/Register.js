@@ -271,7 +271,7 @@ const Register = () => {
                             <form onSubmit={validateOtp}>
                                 <div className="modal-body">
                                     <div className="form-group">
-                                        <label className="modal-label">Enter OTP sent to your email {otp} ({email}):</label>
+                                        <label className="modal-label">Enter OTP sent to your email ({email}):</label>
                                         <input type="number" className="form-control" value={vOtp} onChange={(e) => setVOtp(e.target.value)} />
                                     </div>
                                 </div>

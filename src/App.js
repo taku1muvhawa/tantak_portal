@@ -27,7 +27,7 @@ import Subscribers from './CollegeAdmin/Subscribers/Subscribers';
 import MyClasses from './MyClasses/MyClasses';
 import TantakDash from './Admin/AdminTantak/TantakDash';
 import Error from './Error';
-import PdfViewer from './PdfViewer';
+// import PdfViewer from './PdfViewer';
 
 function App() {
 

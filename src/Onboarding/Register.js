@@ -112,6 +112,11 @@ const Register = () => {
         }
     };
 
+    // const sendOtp = async (e) => {
+    //     e.preventDefault();
+    //     setShowAddModal(true);
+    // };
+
     useEffect(() => {
         generateOtp();
     }, []);

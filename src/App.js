@@ -27,8 +27,11 @@ import Subscribers from './CollegeAdmin/Subscribers/Subscribers';
 import MyClasses from './MyClasses/MyClasses';
 import TantakDash from './Admin/AdminTantak/TantakDash';
 import Error from './Error';
+import PdfViewer from './PdfViewer';
 
 function App() {
+
+    // const pdfUrl = 'file:///C:/Users/HP/educonnect/educonnect/backend/git/tantak_elearning/uploads/1732540527987.pdf';
 
     return (
         <BrowserRouter>
@@ -36,6 +39,7 @@ function App() {
                 <Routes>
                     <Route path='/' element={<Login/>}></Route>
                     <Route path='/blank' element={<Blank/>}></Route>
+                    {/* <Route path='/pdfviewer' element={<PdfViewer pdfFile={pdfUrl} />}></Route> */}
                     <Route path='/admin-dashboard' element={<TantakDash/>}></Route>
                     <Route path='/register' element={<Register />}></Route>
                     <Route path='/register-college' element={<TeacherReg />}></Route>
